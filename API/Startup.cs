@@ -18,7 +18,10 @@ namespace API
 {
     public class Startup
     {
-        public IConfiguration _config { get; }
+        private readonly IConfiguration _config;
+
+        //Inject our configuration into the Startup class whenever it's constructed. 
+        //We will have access to this configuration wherever we need it by accessing the _config variable. 
         public Startup(IConfiguration config)
         {
             _config = config;
@@ -32,11 +35,12 @@ namespace API
 
             services.AddDbContext<DataContext>(options =>
             {
-
+                // configures the DataContext to connect to a SQLite database and sets the connection string. 
                 options.UseSqlite(_config.GetConnectionString("DefaultConnection"));
             });
 
             services.AddControllers();
+            //Add support for Cross Origin Resource Sharing (CORS) between the API and client side
             services.AddCors();
            
         }
@@ -53,7 +57,8 @@ namespace API
             app.UseHttpsRedirection();
 
             app.UseRouting();
-
+            
+            //Add a CORS policy to allow access to API resources from the origin located at localhost:4200
             app.UseCors(policy => policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200"));
 
             app.UseAuthorization();

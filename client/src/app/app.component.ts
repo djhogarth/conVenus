@@ -15,6 +15,8 @@ export class AppComponent implements OnInit {
     this.getUsers();
   }
 
+  //set the "users" property in our AppComponent class as the response we get back from our API server
+  //display any errors we get back in the console
   getUsers(){
     this.http.get('https://localhost:5001/api/users').subscribe(response => {
       this.users = response;

@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
+    // A class that allows access to our dabase via the DbContext using the _context attribute 
         public class UsersController : BaseApiController
     {
         private readonly DataContext _context;
@@ -15,6 +16,9 @@ namespace API.Controllers
             _context = context;
         }
 
+        // An endpoint that allows the retreival of all users in our database. 
+        //Code is made asynchronous to make application more scalable and able to handle
+        // a potential large number of requests to database
         [HttpGet]
         public async Task<ActionResult<IEnumerable<AppUser>>> GetUsers(){
            
@@ -22,6 +26,8 @@ namespace API.Controllers
 ;
         }
 
+        //An endpoint that allows the retreival of one user via the primaary ID in the database. 
+        
          [HttpGet("{id}")]
         public async Task<ActionResult<AppUser>> GetUser(int id){
             

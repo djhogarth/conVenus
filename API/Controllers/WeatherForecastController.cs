@@ -6,9 +6,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace API.Controllers
-{
+{   
+    //Signifies that this class is of type Apicontroller
     [ApiController]
+    //Routes specify how the user is going to get to the Apicontroller from the client. 
     [Route("[controller]")]
+
+    // controller needs to derive from a controller base
     public class WeatherForecastController : ControllerBase
     {
         private static readonly string[] Summaries = new[]
