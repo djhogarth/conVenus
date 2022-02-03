@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using API.Data;
 using API.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,6 +20,8 @@ namespace API.Controllers
         // An endpoint that allows the retreival of all users in our database. 
         //Code is made asynchronous to make application more scalable and able to handle
         // a potential large number of requests to database
+        
+        [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<AppUser>>> GetUsers(){
            
@@ -28,6 +31,7 @@ namespace API.Controllers
 
         //An endpoint that allows the retreival of one user via the primaary ID in the database. 
         
+        [Authorize]
          [HttpGet("{id}")]
         public async Task<ActionResult<AppUser>> GetUser(int id){
             

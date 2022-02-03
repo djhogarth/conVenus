@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using API.Data;
 using API.DataTransferObjects;
 using API.Entities;
+using API.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,14 +17,17 @@ namespace API.Controllers
     public class AccountController : BaseApiController
     {
         private readonly DataContext _context;
+        private readonly ITokenService _tokenService;
 
-        // gives the ActionController access to the datbase through the DbContext via the _context attribute
-        public AccountController(DataContext context)
+        // inject the DbContext and the token service into the account controller
+        public AccountController(DataContext context, ITokenService tokenService)
         {
+            _tokenService = tokenService;
             _context = context;
         }
 
         //this endpoint adds new users to our database
+
         [HttpPost("register")]
         public async Task<ActionResult<AppUser>> RegisterUser(RegisterDTO registerDTO){
              if(await UserExists(registerDTO.UserName)) return BadRequest("Username already exists") ;
@@ -41,13 +45,17 @@ namespace API.Controllers
             _context.Users.Add(user);
 
             //save new user to database
-            await _context.SaveChangesAsync();
+                        await _context.SaveChangesAsync();
             return user;
                         
         }
 
+        /*this endpoint checks if a user exists in the database
+         and if the password is correct. If either is false then 
+         return an error message */
+
         [HttpPost("login")]
-        public async Task<ActionResult<AppUser>> LoginUser(LoginDTO loginDTO){
+        public async Task<ActionResult<UserDTO>> LoginUser(LoginDTO loginDTO){
              
             //get user from database
             var user = await _context.Users.SingleOrDefaultAsync(x => x.UserName == loginDTO.UserName);
@@ -66,11 +74,15 @@ namespace API.Controllers
                  if (computedPasswordHash[i] != user.PasswordHash[i]) return Unauthorized("Invalid Password!");
             }
             
-            return user;
+            return new UserDTO
+            {
+                Username = user.UserName,
+                Token = _tokenService.CreateToken(user)
+            };
             
         }
         
-        //check if database contains a specific user given a username
+        //this method checks if the database contains a specific user for a given username
          private async  Task<bool> UserExists (String Username) { 
              return await _context.Users.AnyAsync(x => x.UserName == Username.ToLower());
           }
