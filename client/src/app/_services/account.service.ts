@@ -33,7 +33,18 @@ login(model: any) {
   );
 }
 
-//helper method
+register(model: any){
+  return this.http.post(this.baseUrl + 'account/register', model).pipe(
+    map((user: User) => {
+      if(user) {
+        localStorage.setItem('user', JSON.stringify(user));
+        this.currentUserSource.next(user);
+      }
+    })
+  )
+}
+
+//helper method 
 setCurrentUser(user: User){
   this.currentUserSource.next(user);
 }
