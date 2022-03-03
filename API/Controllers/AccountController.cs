@@ -61,7 +61,7 @@ namespace API.Controllers
             var user = await _context.Users.SingleOrDefaultAsync(x => x.UserName == loginDTO.UserName);
 
              // return error message if username is not found
-            if (user == null) return Unauthorized("Invalid Username! Please register or re-type your Username.");
+            if (user == null) return Unauthorized("Invalid Username!");
              /*HMACSHA512 provides the hashing algorithm used to calculate the computed 
              password hash using the user's password salt from the database. */
             
