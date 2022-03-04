@@ -18,8 +18,12 @@
                     <li class="nav-item">
                         <a class="nav-link " routerLink="/messages" routerLinkActive="active">Messages</a>
                     </li>
+
                 </ng-container>
-                
+                  <li class="nav-item">
+                    <a class="nav-link " routerLink="/errors" routerLinkActive="active">Errors</a>
+                  </li>
+
             </ul>
             <!-- Dropdown -->
             <div class="dropdown" *ngIf="(accountService.currentUser$ | async) as user" dropdown>
@@ -31,19 +35,19 @@
                 </div>
             </div>
             <!-- Form -->
-            <form #loginForm ="ngForm" *ngIf="(accountService.currentUser$ | async) === null" class="form-inline mt-2 mt-md-0" (ngSubmit)="login()" 
+            <form #loginForm ="ngForm" *ngIf="(accountService.currentUser$ | async) === null" class="form-inline mt-2 mt-md-0" (ngSubmit)="login()"
                 autocomplete="off">
                 <input
                     name="username"
                     [(ngModel)]="model.username"
-                    class="form-control mr-sm-2" 
-                    type="text" 
+                    class="form-control mr-sm-2"
+                    type="text"
                     placeholder="Username">
-                <input 
+                <input
                     name="password"
                     [(ngModel)]="model.password"
-                    class="form-control mr-sm-2" 
-                    type="password" 
+                    class="form-control mr-sm-2"
+                    type="password"
                     placeholder="Password">
                 <button class="btn btn-success my-2 my-sm-0" type="submit">Login</button>
             </form>
