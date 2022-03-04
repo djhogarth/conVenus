@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { NotFoundComponent } from './errors/not-found/not-found.component';
+import { ServerErrorComponent } from './errors/server-error/server-error.component';
 import { TestErrorsComponent } from './errors/test-errors/test-errors.component';
 import { HomeComponent } from './home/home.component';
 import { ListsComponent } from './lists/lists.component';
@@ -11,7 +12,8 @@ import { AuthGuard } from './_guards/auth.guard';
 
 const routes: Routes = [
   {path: '', component: HomeComponent},
-  { //dummy route used for grouping other routes
+  {
+    //dummy route used for grouping other routes
     path: '',
     runGuardsAndResolvers:"always",
     canActivate: [AuthGuard],
@@ -23,8 +25,12 @@ const routes: Routes = [
   ]},
   {path: 'errors', component: TestErrorsComponent},
   {path: 'not-found', component: NotFoundComponent},
-  //when the user enters an unknown route, redirect to home
-  {path: '**', component: HomeComponent, pathMatch: 'full'},
+  {path: 'server-error', component: ServerErrorComponent},
+
+  /*when the user enters an unknown route, redirect to the
+    'Not Found' page
+    */
+  {path: '**', component: NotFoundComponent, pathMatch: 'full'},
   ];
 
 @NgModule({
