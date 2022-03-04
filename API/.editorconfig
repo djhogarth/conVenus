@@ -23,9 +23,4 @@ dotnet_naming_symbols.private_fields.applicable_accessibilities = private
 dotnet_naming_style.prefix_underscore.capitalization = camel_case
 dotnet_naming_style.prefix_underscore.required_prefix = _
 
-[*.ts]
-quote_type = single
 
-[*.md]
-max_line_length = off
-trim_trailing_whitespace = false
