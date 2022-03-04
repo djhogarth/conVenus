@@ -12,24 +12,21 @@ import { AccountService } from '../_services/account.service';
 })
 export class NavComponent implements OnInit {
   model: any = {}
-  
+
   //Allows the application to know if a user is logged in
 
   constructor(public accountService: AccountService, private router: Router, private toastr: ToastrService) { }
 
   ngOnInit(): void {
-        
+
   }
 
   login(){
     this.accountService.login(this.model).subscribe(response => {
       //navigate user to members page when they login
       this.router.navigateByUrl('/members');
-      
-    },error => {
-      console.log(error);
-      this.toastr.error(error.error);
-    }) 
+
+    })
   }
 
   logOut(){
@@ -38,5 +35,5 @@ export class NavComponent implements OnInit {
    this.router.navigateByUrl('/');
   }
 
-  
+
 }
