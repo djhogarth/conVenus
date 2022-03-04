@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using API.Data;
 using API.Extensions;
 using API.Interfaces;
+using API.Middleware;
 using API.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -27,12 +28,12 @@ namespace API
     {
         private readonly IConfiguration _config;
 
-        //Inject our configuration into the Startup class whenever it's constructed. 
-        //We will have access to this configuration wherever we need it by accessing the _config variable. 
+        //Inject our configuration into the Startup class whenever it's constructed.
+        //We will have access to this configuration wherever we need it by accessing the _config variable.
         public Startup(IConfiguration config)
         {
             _config = config;
-            
+
         }
 
 
@@ -45,22 +46,18 @@ namespace API
             //Add support for Cross Origin Resource Sharing (CORS) between the API and client side
             services.AddCors();
             services.AddIdentityService(_config);
-           
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-                
-            }
+            app.UseMiddleware<ExceptionMiddleware>();
 
             app.UseHttpsRedirection();
 
             app.UseRouting();
-            
+
             //Add a CORS policy to allow access to API resources from the origin located at localhost:4200
             app.UseCors(policy => policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200"));
 
