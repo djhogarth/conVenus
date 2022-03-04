@@ -29,7 +29,7 @@ namespace API.Controllers
         //this endpoint adds new users to our database
 
         [HttpPost("register")]
-        public async Task<ActionResult<AppUser>> RegisterUser(RegisterDTO registerDTO){
+        public async Task<ActionResult<UserDTO>> RegisterUser(RegisterDTO registerDTO){
              if(await UserExists(registerDTO.UserName)) return BadRequest("Username already exists") ;
 
             using var hmac = new HMACSHA512();
@@ -45,26 +45,31 @@ namespace API.Controllers
             _context.Users.Add(user);
 
             //save new user to database
-                        await _context.SaveChangesAsync();
-            return user;
-                        
+            await _context.SaveChangesAsync();
+
+            return new UserDTO
+            {
+                Username = user.UserName,
+                Token = _tokenService.CreateToken(user)
+            };
+
         }
 
         /*this endpoint checks if a user exists in the database
-         and if the password is correct. If either is false then 
+         and if the password is correct. If either is false then
          return an error message */
 
         [HttpPost("login")]
         public async Task<ActionResult<UserDTO>> LoginUser(LoginDTO loginDTO){
-             
+
             //get user from database
             var user = await _context.Users.SingleOrDefaultAsync(x => x.UserName == loginDTO.UserName);
 
              // return error message if username is not found
             if (user == null) return Unauthorized("Invalid Username!");
-             /*HMACSHA512 provides the hashing algorithm used to calculate the computed 
+             /*HMACSHA512 provides the hashing algorithm used to calculate the computed
              password hash using the user's password salt from the database. */
-            
+
             using var hmac = new HMACSHA512(user.PasswordSalt);
 
             //compute the password hash of the password inputed using the LoiginDTO
@@ -73,20 +78,20 @@ namespace API.Controllers
             for(int i=0;i<computedPasswordHash.Length;i++){
                  if (computedPasswordHash[i] != user.PasswordHash[i]) return Unauthorized("Invalid Password!");
             }
-            
+
             return new UserDTO
             {
                 Username = user.UserName,
                 Token = _tokenService.CreateToken(user)
             };
-            
+
         }
-        
+
         //this method checks if the database contains a specific user for a given username
-         private async  Task<bool> UserExists (String Username) { 
+         private async  Task<bool> UserExists (String Username) {
              return await _context.Users.AnyAsync(x => x.UserName == Username.ToLower());
           }
 
-        
+
     }
 }

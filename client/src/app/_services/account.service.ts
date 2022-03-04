@@ -14,19 +14,19 @@ export class AccountService {
   currentUser$ = this.currentUserSource.asObservable();
   constructor(private http: HttpClient) { }
 
-  /*A userDTO is returned to us from the API. 
-    We want to transform this data inside the 
+  /*A userDTO is returned to us from the API.
+    We want to transform this data inside the
     http post before we subscribe to it */
 login(model: any) {
   return this.http.post(this.baseUrl + 'account/login', model).pipe(
-    /*Get the response from the server and then get the user from the response. 
+    /*Get the response from the server and then get the user from the response.
       If there is a user, add the user object to local storage within the browser.*/
-    
+
     map((response : User) => {
       const user = response;
       if (user){
         localStorage.setItem('user',JSON.stringify(user));
-        this.currentUserSource.next(user);
+        this.setCurrentUser(user);
 
       }
     })
@@ -35,16 +35,17 @@ login(model: any) {
 
 register(model: any){
   return this.http.post(this.baseUrl + 'account/register', model).pipe(
-    map((user: User) => {
+    map((response: User) => {
+      const user = response;
       if(user) {
         localStorage.setItem('user', JSON.stringify(user));
-        this.currentUserSource.next(user);
+       this.setCurrentUser(user);
       }
     })
   )
 }
 
-//helper method 
+//helper method
 setCurrentUser(user: User){
   this.currentUserSource.next(user);
 }
