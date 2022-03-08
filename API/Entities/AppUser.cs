@@ -42,9 +42,9 @@ namespace API.Entities
         public ICollection<Photo> Photos { get; set; }
 
         //calculates the user's current age
-        public int GetAge()
-        {
-          return DateOfBirth.CalculateAge();
-        }
+        // public int GetAge()
+        // {
+        //   return DateOfBirth.CalculateAge();
+        // }
     }
 }

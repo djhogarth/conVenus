@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using API.DataTransferObjects;
 using API.Entities;
 
 namespace API.Interfaces
@@ -16,9 +17,17 @@ namespace API.Interfaces
         // returns a list of users
         Task<IEnumerable<AppUser>> GetUsersAsync();
 
+        Task<IEnumerable<MemberDTO>> GetMembersAsync();
+
+
         Task<AppUser> GetUserByIdAsync(int id) ;
 
         Task<AppUser> GetUserByUsernameAsync(string username);
+
+        Task<MemberDTO> GetMemberByUsernameAsync(string username);
+
+
+
 
 
 

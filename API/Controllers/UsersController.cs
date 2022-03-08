@@ -32,11 +32,10 @@ namespace API.Controllers
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<MemberDTO>>> GetUsers(){
-          var users = await _userRepository.GetUsersAsync();
-          var usersToReturn = _mapper.Map<IEnumerable<MemberDTO>>(users);
+          var users = await _userRepository.GetMembersAsync();
 
-            return Ok(usersToReturn);
-;
+            return Ok(users);
+
         }
 
         //An endpoint that allows the retreival of one user via the primaary ID in the database.
@@ -45,10 +44,7 @@ namespace API.Controllers
          [HttpGet("{username}")]
         public async Task<ActionResult<MemberDTO>> GetUser(string username){
 
-          var user = await _userRepository.GetUserByUsernameAsync(username);
-          var userToReturn = _mapper.Map<MemberDTO>(user);
-
-          return userToReturn ;
+          return await _userRepository.GetMemberByUsernameAsync(username) ;
         }
     }
 }
