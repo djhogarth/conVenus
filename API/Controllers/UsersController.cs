@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using API.Data;
 using API.Entities;
+using API.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -9,15 +10,16 @@ using Microsoft.EntityFrameworkCore;
 namespace API.Controllers
 {
     // A class that allows access to our dabase via the DbContext using the _context attribute
-    
+
     [Authorize]
         public class UsersController : BaseApiController
     {
-        private readonly DataContext _context;
-        public UsersController(DataContext context)
-        {
-            _context = context;
-        }
+      private readonly IUserRepository _userRepository;
+
+      public UsersController(IUserRepository userRepository)
+      {
+      _userRepository = userRepository;
+      }
 
         // An endpoint that allows the retreival of all users in our database.
         //Code is made asynchronous to make application more scalable and able to handle
@@ -27,18 +29,19 @@ namespace API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<AppUser>>> GetUsers(){
 
-            return await  _context.Users.ToListAsync();
+
+            return Ok(await _userRepository.GetUsersAsync());
 ;
         }
 
         //An endpoint that allows the retreival of one user via the primaary ID in the database.
 
 
-         [HttpGet("{id}")]
-        public async Task<ActionResult<AppUser>> GetUser(int id){
+         [HttpGet("{username}")]
+        public async Task<ActionResult<AppUser>> GetUser(string username){
 
 
-            return await  _context.Users.FindAsync(id);;
+            return await _userRepository.GetUserByUsernameAsync(username);
         }
     }
 }
