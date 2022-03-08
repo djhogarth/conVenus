@@ -6,6 +6,6 @@ namespace API.DataTransferObjects
 
     //photo Url
     public string Url { get; set; }
-    public bool IsMainPhoto{ get; set; }
+    public bool IsMain{ get; set; }
   }
 }

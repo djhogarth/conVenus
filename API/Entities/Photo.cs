@@ -6,12 +6,12 @@ namespace API.Entities
 
     //photo Url
     public string Url { get; set; }
-    public bool IsMainPhoto { get; set; }
-    //used for the photo storage solution that's used
+    public bool IsMain { get; set; }
 
     public AppUser User { get; set; }
     public int UserId { get; set; }
-    
+
+//used for the photo storage solution that's used
     public string PublicId { get; set; }
   }
 }
