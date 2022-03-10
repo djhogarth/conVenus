@@ -1,0 +1,29 @@
+.img-thumbnail{
+  margin: 25px;
+  width: 85%;
+  height: 85%;
+}
+
+.card-body{
+  padding: 0 25px;
+}
+
+.card-footer{
+  padding: 10px 15px;
+  background-color: #FFFF;
+  border-top: none;
+}
+
+textarea{
+  display: block;
+  margin: auto;
+  width: 98%;
+  }
+
+  h4{
+    text-align: center;
+  }
+  .form-inline{
+
+    margin: 0 10% 0 10%;
+  }
