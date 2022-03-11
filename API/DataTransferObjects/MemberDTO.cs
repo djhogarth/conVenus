@@ -22,7 +22,7 @@ namespace API.DataTransferObjects
 
         public string Gender { get; set; }
 
-        public String Introduction  { get; set; }
+        public string Introduction  { get; set; }
         public string LookingFor { get; set; }
 
         public string Interests {get; set; }
