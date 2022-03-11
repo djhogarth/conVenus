@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { NgxGalleryAnimation, NgxGalleryImage, NgxGalleryOptions } from '@kolkov/ngx-gallery';
 import { Member } from 'src/app/_models/members';
 import { MembersService } from 'src/app/_services/members.service';
+import { SharedModule } from 'src/app/_modules/shared.module';
 
 
 @Component({
