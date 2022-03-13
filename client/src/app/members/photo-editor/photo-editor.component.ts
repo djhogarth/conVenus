@@ -1,5 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { FileUploader } from 'ng2-file-upload';
+import { take } from 'rxjs/operators';
 import { Member } from 'src/app/_models/members';
+import { User } from 'src/app/_models/user';
+import { AccountService } from 'src/app/_services/account.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-photo-editor',
@@ -8,9 +13,48 @@ import { Member } from 'src/app/_models/members';
 })
 export class PhotoEditorComponent implements OnInit {
   @Input() member: Member;
-  constructor() { }
+  uploader: FileUploader;
+  hasBaseDropzoneOver = false;
+  baseUrl = environment.apiUrl;
+  user: User;
+
+  constructor(private accountService: AccountService) {
+    this.accountService.currentUser$.pipe(take(1)).subscribe(user => this.user = user);
+   }
 
   ngOnInit(): void {
+    this.intialzeUploader();
+  }
+
+  fileOverBase(e: any) {
+    this.hasBaseDropzoneOver = e;
+  }
+  intialzeUploader() {
+    this.uploader = new FileUploader({
+      url: this.baseUrl + 'users/add-photo',
+      authToken: 'Bearer ' + this.user.token,
+      isHTML5: true,
+      //only allow image file types
+      allowedFileType: ['image'],
+      //remove from dropzone after upload has finished
+      removeAfterUpload: true,
+      autoUpload: false,
+      maxFileSize: 10 * 1024 * 1024
+    });
+
+    this.uploader.onAfterAddingFile = (file) => {
+      file.withCredentials = false;
+    }
+
+    /*after photo upload is complete, add the photo
+      to the member's photo collection in JSON format */
+    this.uploader.onSuccessItem = (item, response, status, headers) => {
+      if(response) {
+        const photo = JSON.parse(response);
+        this.member.photos.push(photo);
+      }
+    }
+
   }
 
 }
