@@ -5,7 +5,6 @@ import { Member } from 'src/app/_models/members';
 import { MembersService } from 'src/app/_services/members.service';
 import { SharedModule } from 'src/app/_modules/shared.module';
 
-
 @Component({
   selector: 'app-member-detail',
   templateUrl: './member-detail.component.html',
@@ -31,8 +30,6 @@ export class MemberDetailComponent implements OnInit {
       },
 
     ];
-
-
   }
 
   getImages(): NgxGalleryImage[]{
