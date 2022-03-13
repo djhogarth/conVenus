@@ -26,9 +26,7 @@ login(model: any) {
     map((response : User) => {
       const user = response;
       if (user){
-        localStorage.setItem('user',JSON.stringify(user));
-        this.setCurrentUser(user);
-
+       this.setCurrentUser(user);
       }
     })
   );
@@ -39,7 +37,6 @@ register(model: any){
     map((response: User) => {
       const user = response;
       if(user) {
-        localStorage.setItem('user', JSON.stringify(user));
        this.setCurrentUser(user);
       }
     })
@@ -47,14 +44,15 @@ register(model: any){
 }
 
 //helper method
-setCurrentUser(user: User){
+setCurrentUser(user: User) {
+  localStorage.setItem('user',JSON.stringify(user));
   this.currentUserSource.next(user);
 }
 
 // upon a user logging out, remove them from the broswer local storage
-logOut(){
-localStorage.removeItem('user');
-this.currentUserSource.next(null);
+logOut() {
+  localStorage.removeItem('user');
+  this.currentUserSource.next(null);
 
 }
 
