@@ -8,6 +8,7 @@ using API.Data;
 using API.DataTransferObjects;
 using API.Entities;
 using API.Interfaces;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,13 +19,15 @@ namespace API.Controllers
     {
         private readonly DataContext _context;
         private readonly ITokenService _tokenService;
+    private readonly IMapper _mapper;
 
-        // inject the DbContext and the token service into the account controller
-        public AccountController(DataContext context, ITokenService tokenService)
-        {
-            _tokenService = tokenService;
-            _context = context;
-        }
+    // inject the DbContext and the token service into the account controller
+    public AccountController(DataContext context, ITokenService tokenService, IMapper mapper)
+      {
+        _tokenService = tokenService;
+        _mapper = mapper;
+        _context = context;
+      }
 
         //this endpoint adds new users to our database
 
@@ -34,12 +37,15 @@ namespace API.Controllers
 
             using var hmac = new HMACSHA512();
 
+            var user = _mapper.Map<AppUser>(registerDTO);
+
             //password salt is set to be the randomly generated key that was created when hmac was initialized
-            var user = new AppUser{
-                UserName = registerDTO.UserName.ToLower(),
-                PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDTO.Password)),
-                PasswordSalt = hmac.Key
-            };
+
+                user.UserName = registerDTO.UserName.ToLower();
+                user.PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDTO.Password));
+                user.PasswordSalt = hmac.Key;
+
+
 
             //add new user entity to the DbContext to track changes
             _context.Users.Add(user);
@@ -50,7 +56,8 @@ namespace API.Controllers
             return new UserDTO
             {
                 Username = user.UserName,
-                Token = _tokenService.CreateToken(user)
+                Token = _tokenService.CreateToken(user),
+                Alias = user.Alias
             };
 
         }
@@ -85,7 +92,8 @@ namespace API.Controllers
             {
                 Username = user.UserName,
                 Token = _tokenService.CreateToken(user),
-                PhotoUrl = user.Photos.FirstOrDefault(x => x.IsMain).Url
+                PhotoUrl = user.Photos.FirstOrDefault(x => x.IsMain).Url,
+                Alias = user.Alias
             };
 
         }
