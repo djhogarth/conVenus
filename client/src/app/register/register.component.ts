@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { AccountService } from '../_services/account.service';
 
@@ -9,12 +10,13 @@ import { AccountService } from '../_services/account.service';
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
-  model: any ={};
   @Output() cancelRegister = new EventEmitter();
   registerForm: FormGroup;
   maxDate: Date;
+  validationErrors: string[] = [];
 
-  constructor(public accountService: AccountService, private toastr: ToastrService, private formBuilder: FormBuilder) { }
+  constructor(public accountService: AccountService, private router: Router,
+    private toastr: ToastrService, private formBuilder: FormBuilder) { }
 
   ngOnInit(): void {
     this.intializeForm();
@@ -25,12 +27,12 @@ export class RegisterComponent implements OnInit {
   intializeForm() {
     this.registerForm = this.formBuilder.group(
       {
-      username: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(10)]],
+      username: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(10)]],
       alias: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(15)]],
       gender: ['male'],
       dateOfBirth: ['', Validators.required],
-      city: ['', Validators.required],
-      country: ['', [Validators.required, Validators.minLength(4)]],
+      city: ['', [Validators.required, Validators.minLength(2)]],
+      country: ['', [Validators.required, Validators.minLength(2)]],
       password: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(12)]],
       confirmPassword: ['', this.matchValues('password')]
       });
@@ -48,14 +50,14 @@ export class RegisterComponent implements OnInit {
   }
 
   register() {
-    console.log(this.registerForm.value);
-    // this.accountService.register(this.model).subscribe(response => {
-    //   //close the form when a user regsiters
-    //   this.cancel();
-    // },error => {
-    //   console.log(error);
-    //   this.toastr.error(error.error);
-    // })
+
+    this.accountService.register(this.registerForm.value).subscribe(response => {
+      //re-direct to members page when user registers
+      this.router.navigateByUrl('/members');
+      this.cancel();
+    },error => {
+     this.validationErrors = error;
+    })
   }
 
   cancel(){
