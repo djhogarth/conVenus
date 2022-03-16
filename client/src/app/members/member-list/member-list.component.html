@@ -5,18 +5,18 @@
 <div class="container mt-3">
   <form #form="ngForm" (ngSubmit)="loadMembers()" autocomplete="off" class="form-inline mb-3">
     <div class="form-group">
-      <label> Age from:</label>
-      <input type="number" class="form-control ml-1" style="width: 70px;"
+      <label> <h5 class="text-primary">Min Age :</h5></label>
+      <input type="number" class="form-control ml-1" style="width: 58px; height: 25px;"
         name="minAge" [(ngModel)]="userParams.minAge">
     </div>
     <div class="form-group px-3">
-      <label> Age to:</label>
-      <input type="number" class="form-control ml-1" style="width: 70px;"
+      <label> <h5 class="text-primary">Max Age :</h5></label>
+      <input type="number" class="form-control ml-1" style="width: 58px; height: 25px;"
         name="maxAge" [(ngModel)]="userParams.maxAge">
     </div>
     <div class="form-group px-2">
-      <label> Show:</label>
-      <select class="form-control ml-1" style="width: 130px;"
+      <label> <h5 class="text-primary">Show :</h5></label>
+      <select class="form-control ml-1" style="width: 95px; height: 35px;"
         name="gender" [(ngModel)]="userParams.gender">
         <option *ngFor="let gender of genderList" [value]="gender.value">
           {{gender.display}}
@@ -25,6 +25,31 @@
     </div>
     <button class="btn-primary ml-1" type="submit">Apply Filters</button>
     <button (click)="resetFilters()" class="btn-info ml-1" type="submit">Reset Filters</button>
+    <!-- Oder By buttons -->
+    <div class="col">
+      <div class="btn-group float-right">
+        <!-- last active button -->
+        <button
+          class="btn-primary"
+          type="button"
+          name="oderBy"
+          (click)="loadMembers()"
+          btnRadio="lastActive"
+          [(ngModel)]="userParams.orderBy">
+          LastActive
+        </button>
+        <!-- last created button -->
+        <button
+          class="btn-primary"
+          type="button"
+          name="oderBy"
+          (click)="loadMembers()"
+          btnRadio="created"
+          [(ngModel)]="userParams.orderBy">
+          Newest Members
+        </button>
+      </div>
+    </div>
   </form>
 </div>
 
