@@ -5,18 +5,18 @@
 <div class="container mt-3">
   <form #form="ngForm" (ngSubmit)="loadMembers()" autocomplete="off" class="form-inline mb-3">
     <div class="form-group">
-      <label> <h5 class="text-primary">Min Age :</h5></label>
+      <label class="form-label"> <h5 class="text-primary">Min Age :</h5></label>
       <input type="number" class="form-control ml-1" style="width: 58px; height: 25px;"
         name="minAge" [(ngModel)]="userParams.minAge">
     </div>
     <div class="form-group px-3">
-      <label> <h5 class="text-primary">Max Age :</h5></label>
+      <label class="form-label"> <h5 class="text-primary">Max Age :</h5></label>
       <input type="number" class="form-control ml-1" style="width: 58px; height: 25px;"
         name="maxAge" [(ngModel)]="userParams.maxAge">
     </div>
     <div class="form-group px-2">
-      <label> <h5 class="text-primary">Show :</h5></label>
-      <select class="form-control ml-1" style="width: 95px; height: 35px;"
+      <label class="form-label"> <h5 class="text-primary">Show :</h5></label>
+      <select class=" form-select form-control ml-1" style="width: 120px; height: 35px;"
         name="gender" [(ngModel)]="userParams.gender">
         <option *ngFor="let gender of genderList" [value]="gender.value">
           {{gender.display}}
