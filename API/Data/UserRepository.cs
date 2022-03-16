@@ -37,10 +37,17 @@ namespace API.Data
       query = query.Where(u => u.UserName != parameters.CurrentUsername);
       query = query.Where(u => u.Gender == parameters.Gender);
 
-      /* user can select a min and max age which filters members by date of birth */
+      /* select a min and max age which filters members by date of birth */
       var minDob = DateTime.Today.AddYears(-parameters.MaxAge -1);
       var maxDob = DateTime.Today.AddYears(-parameters.MinAge);
+
       query = query.Where(u => u.DateOfBirth >= minDob && u.DateOfBirth <= maxDob);
+
+      //order members by last created or the default case, last active
+      query = parameters.OrderBy switch{
+        "created" => query.OrderByDescending(u => u.Created),
+         _ => query.OrderByDescending(u => u.LastActive)
+      };
 
       return await PagedList<MemberDTO>.CreateAsync(query.ProjectTo<MemberDTO>(_mapper
         .ConfigurationProvider).AsNoTracking(),
