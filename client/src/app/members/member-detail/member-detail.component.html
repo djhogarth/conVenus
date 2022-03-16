@@ -1,25 +1,31 @@
+<!-- Shows the member details, including profile picture,
+    date last active and created, country and city. -->
 <div class="row" *ngIf="member">
   <div class="col-4">
     <div class="card">
       <img src="{{member.photoUrl || './assets/user.png'}}" alt="{{member.alias}}"
         class="card-img-top img-thumbnail">
       <div class="card-body">
+        <!-- country -->
         <div>
           <strong>Location:</strong>
           <p>{{member.city}}, {{member.country}}</p>
         </div>
+        <!-- Age -->
         <div>
           <strong>Age:</strong>
           <p>{{member.age}}</p>
         </div>
+        <!-- Last Active and Created Dates -->
         <div>
           <strong>Member Since:</strong>
-          <p>{{member.created}}</p>
+          <p>{{member.created | date: 'longDate'}}</p>
         </div>
         <div>
           <strong>Last Active:</strong>
-          <p>{{member.lastActive}}</p>
+          <p>{{member.lastActive | date: 'longDate'}}</p>
         </div>
+        <!-- Like and Message -->
         <div class="card-footer">
           <div class="btn-group d-flex">
             <button class="btn btn-primary mr-2">Like</button>
