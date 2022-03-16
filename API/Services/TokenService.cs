@@ -25,13 +25,15 @@ namespace API.Services
             var claims = new List<Claim>
             {
                 //nameId of our Jwt token will be the user's username
-                new Claim(JwtRegisteredClaimNames.NameId, user.UserName)
+                new Claim(JwtRegisteredClaimNames.NameId, user.ID.ToString()),
+                new Claim(JwtRegisteredClaimNames.UniqueName, user.UserName)
+
             };
 
             /*
-            creating some credentials. We specify what security algorithm 
+            creating some credentials. We specify what security algorithm
             to use for encrypting our jwt token and the security key.
-            */ 
+            */
             var credentials = new SigningCredentials(_key, SecurityAlgorithms.HmacSha512Signature);
 
             //Specify what goes inside our token
