@@ -7,6 +7,7 @@ import {TabsModule} from 'ngx-bootstrap/tabs';
 import { NgxGalleryModule } from '@kolkov/ngx-gallery';
 import { FileUploadModule } from 'ng2-file-upload';
 import { PaginationModule } from "ngx-bootstrap/pagination";
+import { ButtonsModule } from "ngx-bootstrap/buttons";
 
 @NgModule({
   declarations: [],
@@ -21,7 +22,8 @@ import { PaginationModule } from "ngx-bootstrap/pagination";
     NgxGalleryModule,
     FileUploadModule,
     BsDatepickerModule.forRoot(),
-    PaginationModule
+    PaginationModule.forRoot(),
+    ButtonsModule.forRoot()
   ],
   exports:[
     ToastrModule,
@@ -30,7 +32,8 @@ import { PaginationModule } from "ngx-bootstrap/pagination";
     TabsModule,
     NgxGalleryModule,
     FileUploadModule,
-    PaginationModule
+    PaginationModule,
+    ButtonsModule
   ]
 })
 export class SharedModule { }
