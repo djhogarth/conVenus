@@ -14,5 +14,9 @@ namespace API.DataTransferObjects
         public string PhotoUrl { get; set; }
 
         public string Alias { get; set; }
+
+        public string Gender { get; set; }
+
+        
     }
 }
