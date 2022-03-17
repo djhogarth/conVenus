@@ -16,7 +16,7 @@ namespace API.Data
 
 
         //Give the table names
-        public DbSet<AppUser> Users { get; set; }
+        public DbSet<AppUser> User { get; set; }
         public DbSet<AppUserLike> Likes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)

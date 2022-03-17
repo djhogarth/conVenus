@@ -48,7 +48,7 @@ namespace API.Controllers
 
 
             //add new user entity to the DbContext to track changes
-            _context.Users.Add(user);
+            _context.User.Add(user);
 
             //save new user to database
             await _context.SaveChangesAsync();
@@ -71,7 +71,7 @@ namespace API.Controllers
         public async Task<ActionResult<UserDTO>> LoginUser(LoginDTO loginDTO){
 
             //get user from database
-            var user = await _context.Users
+            var user = await _context.User
             .Include(u => u.Photos).
             SingleOrDefaultAsync(x => x.UserName == loginDTO.UserName);
 
@@ -102,7 +102,7 @@ namespace API.Controllers
 
         //this method checks if the database contains a specific user for a given username
          private async  Task<bool> UserExists (String Username) {
-             return await _context.Users.AnyAsync(x => x.UserName == Username.ToLower());
+             return await _context.User.AnyAsync(x => x.UserName == Username.ToLower());
           }
 
 
