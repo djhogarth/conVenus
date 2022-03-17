@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using API.DataTransferObjects;
 using API.Entities;
 using API.Extensions;
+using API.Helpers;
 using API.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -32,35 +33,37 @@ namespace API.Data
        The userId is used to compare against the either the
        SourceUserId or the LikedUserId within the Likes table.
     */
-    public async Task<IEnumerable<LikeDTO>> GetUserLikes(string predicate, int userId)
+    public async Task<PagedList<LikeDTO>> GetUserLikes(LikesParameters likesParams)
     {
       var users = _context.User.OrderBy(u => u.UserName).AsQueryable();
       var likes = _context.Likes.AsQueryable();
 
       // check which list the user is looking for.
-      if(predicate == "liked")
+      if(likesParams.Predicate == "liked")
       {
-        likes = likes.Where(like => like.SourceUserId == userId);
+        likes = likes.Where(like => like.SourceUserId == likesParams.UserId);
         //gives the LikedUsers list
         users = likes.Select(like => like.LikedUser);
       }
 
       //get users that are likedB
-      if(predicate == "likedBy")
+      if(likesParams.Predicate == "likedBy")
       {
-        likes = likes.Where(like => like.LikedUserId == userId);
+        likes = likes.Where(like => like.LikedUserId == likesParams.UserId);
         //gives the LikedByUsers list.
         users = likes.Select(like => like.SourceUser);
       }
 
-      return await users.Select(user => new LikeDTO{
+      var likedUsers = users.Select(user => new LikeDTO{
         Username = user.UserName,
         Alias = user.Alias,
         Age = user.DateOfBirth.CalculateAge(),
         PhotoUrl = user.Photos.FirstOrDefault(p => p.IsMain).Url,
         City = user.City,
         Id = user.ID
-      }).ToListAsync();
+      });
+
+      return await PagedList<LikeDTO>.CreateAsync(likedUsers, likesParams.PageNumber, likesParams.PageSize);
     }
 
     public async Task<AppUser> GeUserWithLikes(int userId)
