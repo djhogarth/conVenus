@@ -16,7 +16,7 @@ namespace API.DataTransferObjects
 
         public int Age { get; set; }
 
-        public string KnownAs { get; set; }
+        public string Alias { get; set; }
 
         public string PhotoUrl {get; set;}
 
