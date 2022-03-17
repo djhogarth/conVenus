@@ -39,6 +39,8 @@ namespace API.Controllers
       if(sourceUser.UserName == username)
         return BadRequest("You cannot like yourself");
 
+      if(userLike != null) return BadRequest("You already liked this user");
+
       userLike = new AppUserLike
       {
         SourceUserId = sourceUserId,
