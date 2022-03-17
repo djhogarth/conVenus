@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Data
 {
-    //Derive from DbContext class which we get from the Entity Framwork Core package 
+    //Derive from DbContext class which we get from the Entity Framwork Core package
     public class DataContext : DbContext
     {
         public DataContext(DbContextOptions options) : base(options)
@@ -15,7 +15,34 @@ namespace API.Data
         }
 
 
-        //Create a DbSet for class AppUser and create a corresponding table inside our Database called Users. 
+        //Give the table names
         public DbSet<AppUser> Users { get; set; }
+        public DbSet<AppUserLike> Likes { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+          base.OnModelCreating(builder);
+          /*For the Likes table, configure primary key */
+          builder.Entity<AppUserLike>()
+            .HasKey(k => new{k.SourceUserId, k.LikedUserId});
+
+          /* configure the many to many relationship between
+            AppUser and AppUserLike entities and foreign key */
+
+          builder.Entity<AppUserLike>()
+            .HasOne(s => s.SourceUser)
+            .WithMany(l => l.LikedUsers)
+            .HasForeignKey(s => s.SourceUserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+          builder.Entity<AppUserLike>()
+            .HasOne(x => x.LikedUser)
+            .WithMany(m => m.LikedByUsers)
+            .HasForeignKey(s => s.LikedUserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        }
+
+
     }
 }
