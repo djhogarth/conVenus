@@ -39,14 +39,18 @@ namespace API.Controllers
 
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<MemberDTO>>> GetUsers([FromQuery] UserParameters parameters){
+        public async Task<ActionResult<IEnumerable<MemberDTO>>> GetUsers([FromQuery] UserParameters parameters)
+        {
 
           var user = await _userRepository.GetUserByUsernameAsync(User.GetUsername());
           parameters.CurrentUsername = user.UserName;
           if(string.IsNullOrEmpty(parameters.Gender)){
+
             /*if set the gender parameter to the opposite of
               gender of the current user */
-            parameters.Gender = user.Gender == "male" ? "female" : "male";
+            if( user.Gender == "male") parameters.Gender = "female";
+            if( user.Gender == "female") parameters.Gender = "male";
+
           }
           var users = await _userRepository.GetMembersAsync(parameters);
 
