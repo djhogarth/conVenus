@@ -7,7 +7,6 @@ namespace API.DataTransferObjects
 {
     public class MessageDTO
     {
-
         public int Id { get; set; }
 
         public int SenderId { get; set; }

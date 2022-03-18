@@ -22,6 +22,7 @@ namespace API.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+          
           base.OnModelCreating(builder);
           /*For the Likes table, configure primary key */
           builder.Entity<AppUserLike>()

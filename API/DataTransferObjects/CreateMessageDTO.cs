@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace API.DataTransferObjects
 {
-    public class CreateMesageDTO
+    public class CreateMessageDTO
     {
         public string RecipientUsername { get; set; }
 
