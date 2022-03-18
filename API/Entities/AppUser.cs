@@ -45,5 +45,8 @@ namespace API.Entities
         public ICollection<AppUserLike> LikedByUsers { get; set; }
         //List of users who are liked by the the logged in user
         public ICollection<AppUserLike> LikedUsers { get; set; }
+        public ICollection<Message> MessagesSent { get; set; }
+        public ICollection<Message> MesagesReceived { get; set; }
+
     }
 }
