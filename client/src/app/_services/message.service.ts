@@ -8,7 +8,7 @@ import { getPaginatedResult, getPaginationHeaders } from './paginationHelper';
   providedIn: 'root'
 })
 export class MessageService {
-  baseUrl : string = environment.apiUrl ;
+   baseUrl : string = environment.apiUrl ;
 
   constructor(private http: HttpClient) { }
 
@@ -20,5 +20,10 @@ export class MessageService {
     return getPaginatedResult<Message[]>(this.baseUrl + 'message', params, this.http);
   }
 
-  
+  getMessageThread(username: string)
+  {
+    return this.http.get<Message[]>(this.baseUrl + 'message/thread/' + username);
+  }
+
+
 }
