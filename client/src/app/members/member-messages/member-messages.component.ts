@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { timeStamp } from 'console';
 import { Message } from 'src/app/_models/message';
 import { MessageService } from 'src/app/_services/message.service';
 
@@ -23,10 +22,8 @@ export class MemberMessagesComponent implements OnInit {
   {
     this.messageService.getMessageThread(this.username).subscribe(messages =>
       {
-      this.messages = messages;
+        this.messages = messages;
       })
   }
-
-
 
 }
