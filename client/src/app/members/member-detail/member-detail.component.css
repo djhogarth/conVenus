@@ -4,8 +4,10 @@
   height: 85%;
 }
 
-.card-body{
-  padding: 0 25px;
+.card-body
+{
+
+  padding: .5rem 2rem;
 }
 
 .card-footer{
