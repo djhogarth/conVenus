@@ -21,10 +21,15 @@ export class MemberDetailComponent implements OnInit {
   activeTab: TabDirective;
   members: Member [];
   messages : Message[] = [];
+
   constructor( private memberService: MembersService, private route: ActivatedRoute, private messageService: MessageService) { }
 
   ngOnInit(): void {
     this.loadMember();
+
+    this.route.queryParams.subscribe(params => {
+      params.tab ? this.selectTab(params.tab) : this.selectTab(0);
+    })
 
     this.galleryOptions = [
       {
@@ -49,6 +54,10 @@ export class MemberDetailComponent implements OnInit {
       })
     }
     return imageUrls;
+  }
+
+  selectTab(tabId: number){
+    this.memberTabs.tabs[tabId].active = true;
   }
 
   // only load messages if the Messages Tab is selected
