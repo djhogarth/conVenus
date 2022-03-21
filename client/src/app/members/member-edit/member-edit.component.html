@@ -8,7 +8,7 @@
     </div>
   </div>
   <div class="col-4">
-      <div class="card">
+      <div class="card bg-light">
         <img src="{{member.photoUrl || './assets/user.png'}}" alt="{{member.alias}}"
           class="card-img-top img-thumbnail">
         <div class="card-body">
@@ -36,25 +36,26 @@
       </div>
     <div class="col-8">
       <tabset class="member-tabset">
+        <!-- About section -->
         <tab heading="About {{member.alias}}">
           <form #editForm="ngForm" id="editForm" (ngSubmit)="updateMember()">
-            <h4>Description</h4> <hr>
+            <h4 style="text-align: center;"><strong>Description</strong></h4> <hr>
             <textarea class="form-control" [(ngModel)]="member.introduction" name="introduction" rows="6"></textarea>
-            <h4 class="mt-2">Looking For</h4> <hr>
+            <h4 class="mt-2" style="text-align: center;"><strong>Looking For</strong></h4> <hr>
             <textarea class="form-control" [(ngModel)]="member.lookingFor" name="lookingFor" rows="6"></textarea>
-            <h4 class="mt-2">Interest</h4> <hr>
+            <h4 class="mt-2" style="text-align: center;"><strong>Interests</strong></h4> <hr>
             <textarea class="form-control" [(ngModel)]="member.interests" name="interests" rows="6"></textarea>
-            <h4 class="mt-2">Location Details</h4>
+            <h4 class="mt-2" style="text-align: center;"><strong>Location</strong></h4>
             <hr>
             <div class="form-inline">
-              <label for="city">City:</label>
+              <label for="city"> <h6><strong>City:</strong></h6></label>
               <input [(ngModel)]="member.city" type="text" name="city" class="form-control mx-2">
-              <label for="country">Country:</label>
-              <input [(ngModel)]="member.country" type="text" name="country" class="form-control mx-2">
+              <label class="ml-4" for="country"> <h6><strong>Country:</strong></h6>:</label>
+              <input [(ngModel)]="member.country" type="text" name="country" class="form-control ml-2">
             </div>
           </form>
         </tab>
-       <tab heading="Edit Phots">
+       <tab heading="Edit Photos">
           <app-photo-editor [member]="member"></app-photo-editor>
         </tab>
       </tabset>
