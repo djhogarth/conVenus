@@ -1,5 +1,10 @@
 .img-circle
  {
    max-height: 50px;
-   
+
+ }
+
+ table
+ {
+   background-color: lightgrey;
  }
