@@ -25,27 +25,27 @@
 </div>
 <!-- No messages -->
 <div *ngIf="messages?.length === 0" class="row">
-  <h3>No Messages</h3>
+  <h3 style="text-align: center;">No Messages</h3>
 </div>
 
 <div *ngIf="messages?.length > 0" class="row">
   <table class="table table-hover" style="cursor: pointer;">
     <tr>
-      <th style="width: 40%;"> Message:</th>
-      <th style="width: 20%;"> From / To :</th>
-      <th style="width: 20%;"> Sent / Received:</th>
+      <th class="text-primary" style="width: 40%;  text-align: center;"> Message:</th>
+      <th class="text-primary" style="width: 20%;"> From / To :</th>
+      <th class="text-primary" style="width: 20%;"> Sent / Received:</th>
       <th style="width: 20%;"></th>
     </tr>
     <!-- Display messages -->
     <tr *ngFor="let message of messages"
       routerLink='{{container === "Outbox" ?
         "/members/" + message.recipientUsername :
-          "/members/" + message.senderUsername}}'>
+          "/members/" + message.senderUsername}} ' [queryParams]="{tab:3}">
       <td>{{message.content}}</td>
       <td>
         <div *ngIf="container === 'Outbox'">
           <img
-            class="img-circle rounded-circle mr-2"
+            class="img-circle rounded-circle"
             src="{{message.recipientPhotoUrl || './assets/user.png'}}"
             alt="{{message.recipientUsername}}">
           <strong>{{message.recipientUsername | titlecase}}</strong>
