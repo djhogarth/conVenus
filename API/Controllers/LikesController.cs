@@ -33,7 +33,7 @@ namespace API.Controllers
       var likedUser = await _userRepository.GetUserByUsernameAsync(username);
       var sourceUser = await _likesRepository.GeUserWithLikes(sourceUserId);
 
-      var userLike = await _likesRepository.GetAppUserLike(sourceUserId, likedUser.ID);
+      var userLike = await _likesRepository.GetAppUserLike(sourceUserId, likedUser.Id);
       if(likedUser == null) return NotFound();
 
       //prevent user from liking themselves
@@ -45,7 +45,7 @@ namespace API.Controllers
       userLike = new AppUserLike
       {
         SourceUserId = sourceUserId,
-        LikedUserId = likedUser.ID
+        LikedUserId = likedUser.Id
       };
 
       sourceUser.LikedUsers.Add(userLike);

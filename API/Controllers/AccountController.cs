@@ -29,23 +29,15 @@ namespace API.Controllers
         _context = context;
       }
 
-        //this endpoint adds new users to our database
+        //this endpoint adds new users to the database
 
         [HttpPost("register")]
         public async Task<ActionResult<UserDTO>> RegisterUser(RegisterDTO registerDTO){
              if(await UserExists(registerDTO.UserName)) return BadRequest("Username already exists") ;
 
-            using var hmac = new HMACSHA512();
-
             var user = _mapper.Map<AppUser>(registerDTO);
 
-            //password salt is set to be the randomly generated key that was created when hmac was initialized
-
-                user.UserName = registerDTO.UserName.ToLower();
-                user.PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDTO.Password));
-                user.PasswordSalt = hmac.Key;
-
-
+            user.UserName = registerDTO.UserName.ToLower();
 
             //add new user entity to the DbContext to track changes
             _context.User.Add(user);
@@ -77,17 +69,7 @@ namespace API.Controllers
 
              // return error message if username is not found
             if (user == null) return Unauthorized("Invalid Username!");
-             /*HMACSHA512 provides the hashing algorithm used to calculate the computed
-             password hash using the user's password salt from the database. */
 
-            using var hmac = new HMACSHA512(user.PasswordSalt);
-
-            //compute the password hash of the password inputed using the LoiginDTO
-            var computedPasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(loginDTO.Password));
-            //compare to see if both hashes are equal in order to verify matching passwords. If not return error message.
-            for(int i=0;i<computedPasswordHash.Length;i++){
-                 if (computedPasswordHash[i] != user.PasswordHash[i]) return Unauthorized("Invalid Password!");
-            }
 
             return new UserDTO
             {

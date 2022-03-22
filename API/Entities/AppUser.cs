@@ -2,25 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using API.Extensions;
+using Microsoft.AspNetCore.Identity;
 
 namespace API.Entities
 {
 
-    public class AppUser
+    public class AppUser : IdentityUser<int>
     {
-        // userID
-        public int ID { get; set; }
-
-        public string UserName { get; set; }
-
-        /*  password salts prevent two users with the same password from getting the same hash.
-            It also adds another layer of complexity to the password hash   */
-        public byte[] PasswordSalt {get; set; }
-
-        //password hashing is used to ecrypt passwords stored in the database
-        public byte[] PasswordHash { get; set; }
-
         public DateTime DateOfBirth{get; set;}
 
         //The name the user wants to be known as
@@ -47,6 +35,8 @@ namespace API.Entities
         public ICollection<AppUserLike> LikedUsers { get; set; }
         public ICollection<Message> MessagesSent { get; set; }
         public ICollection<Message> MesagesReceived { get; set; }
+
+        public ICollection<AppUserRole> UserRoles { get; set; }
 
     }
 }
