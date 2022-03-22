@@ -35,7 +35,10 @@ namespace API.Data
 
     public async Task<Message> GetMessage(int id)
     {
-      return await _context.Message.FindAsync(id);
+      return await _context.Message
+        .Include(u => u.Sender)
+        .Include(u => u.Recipient)
+        .SingleOrDefaultAsync(x => x.Id == id);
     }
 
     public async Task<PagedList<MessageDTO>> GetMessagesForUser(MessageParameters messageParams)
@@ -51,7 +54,7 @@ namespace API.Data
         "Outbox" => query.Where(u => u.Sender.UserName == messageParams.Username
           && u.SenderDeleted == false),
         _ => query.Where(u => u.Recipient.UserName ==
-            messageParams.Username && u.RecipientDeleted = false && u.DateRead == null)
+            messageParams.Username && u.RecipientDeleted == false && u.DateRead == null)
       };
 
       var messages = query.ProjectTo<MessageDTO>(_mapper.ConfigurationProvider);
