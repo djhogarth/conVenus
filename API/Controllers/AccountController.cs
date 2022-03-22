@@ -9,6 +9,7 @@ using API.DataTransferObjects;
 using API.Entities;
 using API.Interfaces;
 using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,16 +18,18 @@ namespace API.Controllers
     /* The AccountController class implements the register and login actions of the AppUser */
     public class AccountController : BaseApiController
     {
-        private readonly DataContext _context;
-        private readonly ITokenService _tokenService;
+    private readonly UserManager<AppUser> _userManager;
+    private readonly SignInManager<AppUser> _signInManager;
+    private readonly ITokenService _tokenService;
     private readonly IMapper _mapper;
 
     // inject the DbContext and the token service into the account controller
-    public AccountController(DataContext context, ITokenService tokenService, IMapper mapper)
+    public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, ITokenService tokenService, IMapper mapper)
       {
+        _userManager = userManager;
+        _signInManager = signInManager;
         _tokenService = tokenService;
         _mapper = mapper;
-        _context = context;
       }
 
         //this endpoint adds new users to the database
@@ -39,11 +42,9 @@ namespace API.Controllers
 
             user.UserName = registerDTO.UserName.ToLower();
 
-            //add new user entity to the DbContext to track changes
-            _context.Users.Add(user);
-
-            //save new user to database
-            await _context.SaveChangesAsync();
+            //add a new user to database and save changes.
+            var result = await _userManager.CreateAsync(user, registerDTO.Password);
+            if(!result.Succeeded) return BadRequest(result.Errors);
 
             return new UserDTO
             {
@@ -63,13 +64,17 @@ namespace API.Controllers
         public async Task<ActionResult<UserDTO>> LoginUser(LoginDTO loginDTO){
 
             //get user from database
-            var user = await _context.Users
+            var user = await _userManager.Users
             .Include(u => u.Photos).
-            SingleOrDefaultAsync(x => x.UserName == loginDTO.UserName);
+            SingleOrDefaultAsync(x => x.UserName == loginDTO.UserName.ToLower());
 
              // return error message if username is not found
             if (user == null) return Unauthorized("Invalid Username!");
 
+            var result = await _signInManager
+              .CheckPasswordSignInAsync(user, loginDTO.Password, false);
+
+            if(!result.Succeeded) return Unauthorized();
 
             return new UserDTO
             {
@@ -84,7 +89,7 @@ namespace API.Controllers
 
         //this method checks if the database contains a specific user for a given username
          private async  Task<bool> UserExists (String Username) {
-             return await _context.Users.AnyAsync(x => x.UserName == Username.ToLower());
+             return await _userManager.Users.AnyAsync(x => x.UserName == Username.ToLower());
           }
 
 
