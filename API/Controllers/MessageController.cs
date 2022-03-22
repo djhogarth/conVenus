@@ -52,7 +52,8 @@ namespace API.Controllers
 
       _messageRepository.AddMessage(message);
 
-      if(await _messageRepository.SaveAllAsync()) return Ok(_mapper.Map<MessageDTO>(message));
+      if(await _messageRepository.SaveAllAsync())
+        return Ok(_mapper.Map<MessageDTO>(message));
 
       return BadRequest("Failed to send message");
 
@@ -81,10 +82,7 @@ namespace API.Controllers
       return Ok(await _messageRepository.GetMessageThread(currentUsername, username));
     }
 
-  }
-
-  [HttpDelete("{id}")]
-
+     [HttpDelete("{id}")]
   public async Task<ActionResult>DeleteMessage(int id)
   {
     var username = User.GetUsername();
@@ -106,10 +104,7 @@ namespace API.Controllers
 
     return BadRequest("Problem deleting the message");
 
-
-
-
-
+  }
 
   }
 
