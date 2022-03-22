@@ -16,7 +16,7 @@
                     message was read -->
               <small class="text-muted text-white">
                 <span class="fa fa-clock-o">
-                  {{message.messageSent | timeago}}
+                 sent {{message.messageSent | timeago}}
                 </span>
                 <span class="text-danger" *ngIf="!message.dateRead
                   && message.senderUsername !== username">

@@ -94,6 +94,10 @@ export class MembersService {
   {
     return this.http.delete(this.baseUrl + 'users/delete-photo/' + photoId);
   }
+  deleteMessage(id: number)
+  {
+    return this.http.delete(this.baseUrl + 'message/' + id)
+  }
 
   //logged in user likes another user
   addLike(username: string)
