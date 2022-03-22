@@ -35,7 +35,7 @@ namespace API.Data
     */
     public async Task<PagedList<LikeDTO>> GetUserLikes(LikesParameters likesParams)
     {
-      var users = _context.User.OrderBy(u => u.UserName).AsQueryable();
+      var users = _context.Users.OrderBy(u => u.UserName).AsQueryable();
       var likes = _context.Likes.AsQueryable();
 
       // check which list the user is looking for.
@@ -68,7 +68,7 @@ namespace API.Data
 
     public async Task<AppUser> GeUserWithLikes(int userId)
     {
-      return await _context.User
+      return await _context.Users
         .Include(x => x.LikedUsers)
         .FirstOrDefaultAsync(x => x.Id == userId);
 
