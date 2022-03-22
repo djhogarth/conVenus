@@ -46,6 +46,10 @@ namespace API.Controllers
             var result = await _userManager.CreateAsync(user, registerDTO.Password);
             if(!result.Succeeded) return BadRequest(result.Errors);
 
+            //registered users are given the 'Member' role
+            var roleResult = await _userManager.AddToRoleAsync(user, "Member");
+             if(!roleResult.Succeeded) return BadRequest(roleResult.Errors);
+
             return new UserDTO
             {
                 Username = user.UserName,
