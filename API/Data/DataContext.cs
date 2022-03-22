@@ -3,27 +3,44 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using API.Entities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Data
 {
-    //Derive from DbContext class which we get from the Entity Framwork Core package
-    public class DataContext : DbContext
+    /* Inherits from IdentityDbContext and types are specified so the primiary key is of type int */
+    public class DataContext : IdentityDbContext<AppUser, AppRole, int, IdentityUserClaim<int>,
+      AppUserRole, IdentityUserLogin<int>, IdentityRoleClaim<int>, IdentityUserToken<int>>
     {
         public DataContext(DbContextOptions options) : base(options)
         {
         }
 
-
         //Give the table names
-        public DbSet<AppUser> User { get; set; }
         public DbSet<AppUserLike> Likes { get; set; }
         public DbSet<Message> Message { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-          
+
           base.OnModelCreating(builder);
+
+          /* Configure many-to-many relationship between AppUser
+              and Role entities */
+
+          builder.Entity<AppUser>()
+            .HasMany(usrRole => usrRole.UserRoles)
+            .WithOne(u => u.User)
+            .HasForeignKey(usrRole => usrRole.UserId)
+            .IsRequired();
+
+            builder.Entity<AppRole>()
+            .HasMany(usrRole => usrRole.UserRoles)
+            .WithOne(u => u.Role)
+            .HasForeignKey(usrRole => usrRole.RoleId)
+            .IsRequired();
+
           /*For the Likes table, configure primary key */
           builder.Entity<AppUserLike>()
             .HasKey(k => new{k.SourceUserId, k.LikedUserId});
