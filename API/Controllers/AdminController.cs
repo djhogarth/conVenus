@@ -42,6 +42,38 @@ namespace API.Controllers
           return Ok(users);
       }
 
+      [HttpPost("edit-roles/{username}")]
+
+      public async Task<ActionResult> EditRoles(string username, [FromQuery] string roles)
+      {
+        /* The roles input will be a comma separtated list.
+           So we get the roles by splitting them by the comma */
+        var selectedRoles = roles.Split(",").ToArray();
+
+        /* Find user by username and return not found if user doesn't exist */
+        var user = await _userManager.FindByNameAsync(username);
+
+        if(user == null) return NotFound("Could not find user");
+
+        /* Get given roles for the particular user */
+        var userRoles = await _userManager.GetRolesAsync(user);
+
+        /* look at the selected roles to be edited and add the user to the roles
+           unless they're in that particular role */
+
+        var result = await _userManager.AddToRolesAsync(user, selectedRoles.Except(userRoles));
+
+        if(!result.Succeeded) return BadRequest("Failed to add to roles");
+
+        /* get rid of roles the user had previously before the edit */
+        result = await _userManager.RemoveFromRolesAsync(user, userRoles.Except(selectedRoles));
+
+        if(!result.Succeeded) return BadRequest("Failed to remove from roles");
+
+        //return edited roles and save the changes
+        return Ok(await _userManager.GetRolesAsync(user));
+      }
+
       [Authorize(Policy = "ModeratePhotoRole")]
       [HttpGet("photos-to-moderate")]
 
