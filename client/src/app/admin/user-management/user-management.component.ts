@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { User } from 'src/app/_models/user';
+import { AdminService } from 'src/app/_services/admin.service';
 
 @Component({
   selector: 'app-user-management',
@@ -6,10 +8,21 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./user-management.component.css']
 })
 export class UserManagementComponent implements OnInit {
+  users: Partial<User[]>;
 
-  constructor() { }
+  constructor(private adminService: AdminService) { }
 
-  ngOnInit(): void {
+  ngOnInit(): void
+  {
+    this.gerUsersWithRoles();
+  }
+
+  gerUsersWithRoles()
+  {
+    this.adminService.getUsersWithRoles().subscribe(users =>
+      {
+        this.users = users;
+      })
   }
 
 }

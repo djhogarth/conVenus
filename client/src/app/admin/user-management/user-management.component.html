@@ -1,1 +1,15 @@
-<p>user-management works!</p>
+<div class="row">
+  <table class="table">
+    <tr>
+      <th style="width: 30%;"><h6 class="text-info">Username:</h6></th>
+      <th style="width: 40%;"><h6 class="text-info">Active Role(s):</h6></th>
+      <th style="width: 30%;"></th>
+    </tr>
+    <tr *ngFor="let user of users">
+      <td>{{user.username}}</td>
+      <td>{{user.roles}}</td>
+      <td><button type="button" class="btn btn-outline-info">Edit</button></td>
+
+    </tr>
+  </table>
+</div>
