@@ -48,13 +48,13 @@ namespace API.Controllers
 
             //registered users are given the 'Member' role
             var roleResult = await _userManager.AddToRoleAsync(user, "Member");
-             if(!roleResult.Succeeded) return BadRequest(roleResult.Errors);
+             if(!roleResult.Succeeded) return BadRequest(result.Errors);
 
             return new UserDTO
             {
                 Username = user.UserName,
                 Token = await _tokenService.CreateToken(user),
-              Alias = user.Alias,
+                Alias = user.Alias,
                 Gender = user.Gender
             };
 
@@ -65,12 +65,13 @@ namespace API.Controllers
          return an error message */
 
         [HttpPost("login")]
-        public async Task<ActionResult<UserDTO>> LoginUser(LoginDTO loginDTO){
+        public async Task<ActionResult<UserDTO>> Login(LoginDTO loginDTO){
 
             //get user from database
             var user = await _userManager.Users
-            .Include(u => u.Photos).
-            SingleOrDefaultAsync(x => x.UserName == loginDTO.UserName.ToLower());
+              .Include(u => u.Photos)
+              .SingleOrDefaultAsync(x =>
+                x.UserName == loginDTO.UserName.ToLower());
 
              // return error message if username is not found
             if (user == null) return Unauthorized("Invalid Username!");
@@ -84,7 +85,7 @@ namespace API.Controllers
             {
                 Username = user.UserName,
                 Token = await _tokenService.CreateToken(user),
-                PhotoUrl = user.Photos.FirstOrDefault(x => x.IsMain).Url,
+                PhotoUrl = user.Photos.FirstOrDefault(x => x.IsMain)?.Url,
                 Alias = user.Alias,
                 Gender = user.Gender
             };
@@ -92,7 +93,7 @@ namespace API.Controllers
         }
 
         //this method checks if the database contains a specific user for a given username
-         private async  Task<bool> UserExists (String Username) {
+         private async  Task<bool> UserExists (string Username) {
              return await _userManager.Users.AnyAsync(x => x.UserName == Username.ToLower());
           }
 
