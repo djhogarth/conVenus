@@ -4,6 +4,7 @@ import { ReplaySubject } from 'rxjs';
 import {map} from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { User } from '../_models/user';
+import { PresenceService } from './presence.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,24 +16,27 @@ export class AccountService {
   private currentUserSource = new ReplaySubject<User>(1);
 
   currentUser$ = this.currentUserSource.asObservable();
-  constructor(private http: HttpClient) { }
 
-  /*A userDTO is returned to us from the API.
-    We want to transform this data inside the
-    http post before we subscribe to it */
+  constructor(private http: HttpClient, private presenceService: PresenceService) { }
+
+  /*A userDTO is returned from the API.
+    We then transform this data inside the
+    http post before subscribing to it */
 
   login(model: any)
   {
     return this.http.post(this.baseUrl + 'account/login', model).pipe(
 
-      /*Get the response from the server and then get the user from the response.
-        If there is a user, add the user object to local storage within the browser.*/
+      /*Get the response from the server and then get the user
+        from the response. If there is a user, add the user object
+        to local storage within the browser. */
 
       map((response : User) =>
       {
         const user = response;
         if (user){
         this.setCurrentUser(user);
+        this.presenceService.createHubConnection(user);
         }
       })
     );
@@ -47,6 +51,7 @@ export class AccountService {
         const user = response;
         if(user) {
         this.setCurrentUser(user);
+        this.presenceService.createHubConnection(user);
         }
       })
     )
@@ -84,6 +89,7 @@ export class AccountService {
   {
     localStorage.removeItem('user');
     this.currentUserSource.next(null);
+    this.presenceService.stopHubConnection();
 
   }
 

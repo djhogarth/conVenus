@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { User } from './_models/user';
 import { AccountService } from './_services/account.service';
+import { PresenceService } from './_services/presence.service';
 
 
 @Component({
@@ -13,18 +14,21 @@ export class AppComponent implements OnInit {
   title = 'The Dating Application';
   users: any;
 
-  constructor(private accountService: AccountService ) {}
-  ngOnInit() {
-  
-    this.setCurrentUser(); 
+  constructor(private accountService: AccountService, private presenceService: PresenceService ) {}
+  ngOnInit()
+  {
+    this.setCurrentUser();
   }
 
-  setCurrentUser(){
+  setCurrentUser()
+  {
     const user: User = JSON.parse(localStorage.getItem('user'));
-    this.accountService.setCurrentUser(user);
+    //check if we have a user first before doing anything
+    {
+      this.accountService.setCurrentUser(user);
+      this.presenceService.createHubConnection(user);
+    }
+
   }
 
-  //set the "users" property in our AppComponent class as the response we get back from our API server
-  //display any errors we get back in the console
-  
 }
