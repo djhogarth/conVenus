@@ -1,10 +1,12 @@
 <div class="card mb-4">
   <div class="card-img-wrapper">
-    <img src="{{member.photoUrl || './assets/user.png'}}" alt="{{member.alias}}" class="card-img-top">
+    <img src="{{member.photoUrl || './assets/user.png'}}"
+      alt="{{member.alias}}" class="card-img-top">
     <ul class="list-inline member-icons animate text-center">
       <li class="list-inline-item">
         <!-- profile button -->
-        <button class="btn btn-info" routerLink='/members/{{member.userName}}'>
+        <button class="btn btn-info"
+          routerLink='/members/{{member.userName}}'>
           <i class="fa fa-user-circle"></i>
         </button>
       </li>
@@ -28,7 +30,9 @@
   </div>
   <div class="card-body p-1">
     <h6 class="card-title text-center mb-1">
-      <i class="fa  fa-user-circle-o mr-2"></i>
+      <span [class.is-online]="(getPresence().onlineUsers$ | async).includes(member.userName)">
+        <i class="fa  fa-user-circle-o mr-2"></i>
+      </span>
       <i *ngIf="member.gender == 'male'" class="fa fa-male mr-2"></i>
       <i *ngIf="member.gender == 'female'" class="fa fa-female mr-2"></i>
       {{member.alias}}, {{member.age}}
