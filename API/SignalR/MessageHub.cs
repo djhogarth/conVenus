@@ -7,6 +7,8 @@ using API.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.SignalR;
 using System.Globalization;
+using API.DataTransferObjects;
+using API.Entities;
 
 namespace API.SignalR
 {
@@ -17,14 +19,16 @@ namespace API.SignalR
   public class MessageHub : Hub
   {
     private readonly IMessageRepository _messageRepository;
+    private readonly IUserRepository _userRepository;
     private readonly IMapper _mapper;
 
-    public MessageHub(IMessageRepository messageRepository, IMapper mapper)
+    public MessageHub(IMapper mapper,
+      IMessageRepository messageRepository, IUserRepository userRepository)
     {
       _messageRepository = messageRepository;
+      _userRepository = userRepository;
       _mapper = mapper;
     }
-
     public override async Task OnConnectedAsync()
     {
       /* Create a signalR group for each pair of messaging users.
@@ -75,6 +79,41 @@ namespace API.SignalR
       var stringCompare = string.CompareOrdinal(caller, reciever) < 0;
 
       return stringCompare ? $"{caller}-{reciever}" : $"{reciever}-{caller}";
+    }
+
+    public async Task SendMessage(CreateMessageDTO createMessageDTO)
+    {
+      var username = Context.User.GetUsername();
+
+      if(username == createMessageDTO.RecipientUsername.ToLower())
+        throw new HubException("You cannot send messages to yourself");
+
+      var sender = await _userRepository.GetUserByUsernameAsync(username);
+      var recipient = await _userRepository.GetUserByUsernameAsync(createMessageDTO.RecipientUsername);
+
+      if(recipient == null)
+        new HubException("NotFound");
+
+      var message = new Message
+      {
+        Sender = sender,
+        Recipient = recipient,
+        SenderUsername = sender.UserName,
+        RecipientUsername = recipient.UserName,
+        Content = createMessageDTO.Content,
+      };
+
+      _messageRepository.AddMessage(message);
+
+      if(await _messageRepository.SaveAllAsync())
+      {
+        var group = GetGroupName(sender.UserName, recipient.UserName);
+        await Clients.Group(group).SendAsync("NewMessage", _mapper.Map<MessageDTO>(message));
+      }
+
+
+      new HubException("Failed to send message");
+
     }
   }
 }
