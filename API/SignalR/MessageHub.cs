@@ -20,13 +20,20 @@ namespace API.SignalR
   {
     private readonly IMessageRepository _messageRepository;
     private readonly IUserRepository _userRepository;
+    private readonly IHubContext<PresenceHub> _presenceHub;
+    private readonly PresenceTracker _tracker;
     private readonly IMapper _mapper;
 
-    public MessageHub(IMapper mapper,
-      IMessageRepository messageRepository, IUserRepository userRepository)
+    public MessageHub (IMapper mapper,
+      IMessageRepository messageRepository,
+      IUserRepository userRepository,
+      IHubContext<PresenceHub> presenceHub,
+      PresenceTracker tracker)
     {
       _messageRepository = messageRepository;
       _userRepository = userRepository;
+      _presenceHub = presenceHub;
+      _tracker = tracker;
       _mapper = mapper;
     }
     public override async Task OnConnectedAsync()
@@ -106,10 +113,24 @@ namespace API.SignalR
 
       var group = await _messageRepository.GetMessageGroup(groupName);
 
+      /* Checks if the two users are connected to the same chat window
+         or in the same group */
       if(group.Connections.Any(x => x.Username == recipient.UserName))
       {
         message.DateRead = DateTime.UtcNow;
+      } else {
+
+        /* If the receiver/recipient is online but not
+           connected to the same group as the current user */
+        var connections = await _tracker.GetConnectionsForUser(recipient.UserName);
+
+        if(connections != null)
+        {
+          await _presenceHub.Clients.Clients(connections).SendAsync("NewMessageReceived",
+            new{username = sender.UserName, alias = sender.Alias});
+        }
       }
+      
       _messageRepository.AddMessage(message);
 
       if(await _messageRepository.SaveAllAsync())

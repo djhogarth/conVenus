@@ -62,6 +62,19 @@ namespace API.SignalR
           return Task.CompletedTask;
         }
 
+        //Gets a list of connectionIDs for a particular user
+        public Task<List<string>> GetConnectionsForUser(string username)
+        {
+          List<string> connectionIds;
+
+          lock(OnlineUsers)
+          {
+            connectionIds = OnlineUsers.GetValueOrDefault(username);
+          }
+
+          return Task.FromResult(connectionIds);
+        }
+
         /* Returns a string of all of users currently
            logged-in, ordered by the username. */
         public Task<string[]> GetOnlineUsers()
