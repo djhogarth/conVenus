@@ -11,6 +11,7 @@ import { PresenceService } from './presence.service';
 })
 export class AccountService {
   baseUrl = environment.apiUrl;
+  user: User;
 
   //store only one version of the current user using this buffer like object
   private currentUserSource = new ReplaySubject<User>(1);
@@ -62,6 +63,7 @@ export class AccountService {
   setCurrentUser(user: User)
   {
     user.roles = [];
+    console.log(user.username);
     const roles = this.getDecodedToken(user.token).role;
 
     /* The role field within the token can either be a string

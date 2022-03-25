@@ -12,7 +12,7 @@ import { MessageService } from '../_services/message.service';
   })
 
 export class MessagesComponent implements OnInit {
-  messages: Message[] =[];
+  messages: Message[] = [];
   pagination: Pagination;
   container = 'Unread';
   pageNumber = 1;

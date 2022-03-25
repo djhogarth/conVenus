@@ -44,18 +44,15 @@ namespace API.SignalR
       var httpContext = Context.GetHttpContext();
 
       //change usernames to titlecase for easier readability
-      var caller = CultureInfo.CurrentCulture
-        .TextInfo
-        .ToTitleCase(Context.User.GetUsername());
+      var caller = Context.User.GetUsername();
+
 
       /* When a connection is made to this hub, we get the receiver's
          username using a query string, which is a key of 'user'.
          This is how we know which user profile, the currently
          logged in user has clicked on.
       */
-      var reciever = CultureInfo.CurrentCulture
-        .TextInfo
-        .ToTitleCase(httpContext.Request.Query["user"].ToString());
+      var reciever = httpContext.Request.Query["user"].ToString();
 
       //define the group name and add it to the hub connection
       var groupName = GetGroupName(caller, reciever);
@@ -109,10 +106,12 @@ namespace API.SignalR
       {
         var group = GetGroupName(sender.UserName, recipient.UserName);
         await Clients.Group(group).SendAsync("NewMessage", _mapper.Map<MessageDTO>(message));
+      }else {
+        new HubException("Failed to send message");
       }
 
 
-      new HubException("Failed to send message");
+
 
     }
   }

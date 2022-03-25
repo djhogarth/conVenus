@@ -24,7 +24,7 @@ export class AppComponent implements OnInit {
   {
     const user: User = JSON.parse(localStorage.getItem('user'));
     //check if we have a user first before doing anything
-    {
+    if(user) {
       this.accountService.setCurrentUser(user);
       this.presenceService.createHubConnection(user);
     }
