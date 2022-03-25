@@ -6,10 +6,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace API.Controllers
-{   
+{
     //Signifies that this class is of type Apicontroller
     [ApiController]
-    //Routes specify how the user is going to get to the Apicontroller from the client. 
+    //Routes specify how the user is going to get to the Apicontroller from the client.
     [Route("[controller]")]
 
     // controller needs to derive from a controller base
@@ -33,7 +33,7 @@ namespace API.Controllers
             var rng = new Random();
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
-                Date = DateTime.Now.AddDays(index),
+                Date = DateTime.UtcNow.AddDays(index),
                 TemperatureC = rng.Next(-20, 55),
                 Summary = Summaries[rng.Next(Summaries.Length)]
             })

@@ -37,7 +37,7 @@ namespace API.Services
         var roles = await _userManager.GetRolesAsync(user);
 
         claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
-        
+
 
         /*
         Create some credentials. We specify what security algorithm
@@ -50,7 +50,7 @@ namespace API.Services
         {
           Subject = new ClaimsIdentity(claims),
           //token expires seven days from now
-          Expires = DateTime.Now.AddDays(7),
+          Expires = DateTime.UtcNow.AddDays(7),
           SigningCredentials = credentials
         };
 
