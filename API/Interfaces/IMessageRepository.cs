@@ -10,6 +10,7 @@ namespace API.Interfaces
 {
     public interface IMessageRepository
     {
+        //Methods for general message function
         void AddMessage(Message message);
 
         void DeleteMessage(Message message);
@@ -19,7 +20,18 @@ namespace API.Interfaces
 
         Task<IEnumerable<MessageDTO>> GetMessageThread(string currentUsername, string recipientUsername);
 
+        //Methods that help manage SignalR connections
+        void AddGroup(Group group);
+        void RemoveConnection(Connection connection);
+        Task<Connection> GetConnection(string connectionId);
+        Task<Group> GetMessageGroup(string groupName);
+
+        //Save all changes to entities
         Task<bool> SaveAllAsync();
+
+
+
+
 
     }
 }

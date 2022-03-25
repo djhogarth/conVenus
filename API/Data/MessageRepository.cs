@@ -22,7 +22,6 @@ namespace API.Data
       _context = context;
       _mapper = mapper;
     }
-
     public void AddMessage(Message message)
     {
       _context.Message.Add(message);
@@ -32,7 +31,6 @@ namespace API.Data
     {
       _context.Message.Remove(message);
     }
-
     public async Task<Message> GetMessage(int id)
     {
       return await _context.Message
@@ -40,7 +38,6 @@ namespace API.Data
         .Include(u => u.Recipient)
         .SingleOrDefaultAsync(x => x.Id == id);
     }
-
     public async Task<PagedList<MessageDTO>> GetMessagesForUser(MessageParameters messageParams)
     {
      var query = _context.Message
@@ -96,7 +93,27 @@ namespace API.Data
 
         //return message DTOs
         return _mapper.Map<IEnumerable<MessageDTO>>(messages);
+    }
+    public void AddGroup(Group group)
+    {
+      _context.Groups.Add(group);
+    }
+    public async Task<Group> GetMessageGroup(string groupName)
+    {
+      return await _context.Groups
+      .Include(x => x.Connections)
+      .FirstOrDefaultAsync(x => x.Name == groupName);
+    }
 
+    public async Task<Connection> GetConnection(string connectionId)
+    {
+      return await _context.Connections.FindAsync(connectionId);
+    }
+
+
+    public void RemoveConnection(Connection connection)
+    {
+     _context.Connections.Remove(connection);
     }
 
     public async Task<bool> SaveAllAsync()
