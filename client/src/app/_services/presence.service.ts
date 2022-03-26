@@ -35,12 +35,25 @@ export class PresenceService {
 
     /* Listen for server events and show
        notifications when user logs in or out. */
-    this.hubConnection.on('UserIsOnline', username => {
-      this.toastr.info(username + ' has connected');
+    this.hubConnection.on('UserIsOnline', username =>
+    {
+      /* Update the list of online users we are tracking
+         wth the new user that has just logged on */
+      this.onlineUsers$.pipe(take(1)).subscribe(usernames =>
+        {
+          this.onlineUserSource.next([...usernames, username]);
+        })
+
     });
 
-    this.hubConnection.on('UserIsOffline', username => {
-      this.toastr.warning(username + ' has disconnected');
+    this.hubConnection.on('UserIsOffline', username =>
+    {
+      /* Update the list of online users we are tracking
+         by taking out the user who has just logged out */
+      this.onlineUsers$.pipe(take(1)).subscribe(usernames =>
+        {
+          this.onlineUserSource.next([...usernames.filter(x => x !== username)]);
+        })
     });
 
     this.hubConnection.on('GetOnlineUsers', (usernames : string[]) => {

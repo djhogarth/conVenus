@@ -17,8 +17,10 @@ namespace API.SignalR
         private readonly Dictionary<string, List<string>> OnlineUsers =
          new Dictionary<string, List<string>>();
 
-        public Task UserConnected(string username, string connectionId)
+        public Task<bool> UserConnected(string username, string connectionId)
         {
+          /* isOnline is only true if a user comes online with no other devices connected  */
+          bool isOnline = false;
           lock(OnlineUsers)
           {
             /* Check if a dictionary element exists with key of the
@@ -33,13 +35,19 @@ namespace API.SignalR
             else
             {
               OnlineUsers.Add(username, new List<string>{connectionId});
+              isOnline = true;
             }
           }
 
-          return Task.CompletedTask;
+          return Task.FromResult(isOnline);
         }
-        public Task UserDisconnected(string username, string connectionId)
+        public Task<bool> UserDisconnected(string username, string connectionId)
         {
+
+          /* isOffline is only true when a user has no other
+             devices logged into their user account */
+          bool isOffline = false;
+
           lock(OnlineUsers)
           {
             /* Check if a dictionary element already exists
@@ -49,17 +57,18 @@ namespace API.SignalR
                connectionId from the element. If a element
                has 0 connectionIds for said username, it's removed. */
 
-            if(!OnlineUsers.ContainsKey(username)) return Task.CompletedTask;
+            if(!OnlineUsers.ContainsKey(username)) return Task.FromResult(isOffline);
 
             OnlineUsers[username].Remove(connectionId);
 
             if (OnlineUsers[username].Count == 0)
             {
               OnlineUsers.Remove(username);
+              isOffline = true;
             }
           }
 
-          return Task.CompletedTask;
+          return Task.FromResult(isOffline);
         }
 
         //Gets a list of connectionIDs for a particular user
