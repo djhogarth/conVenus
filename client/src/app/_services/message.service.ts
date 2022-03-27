@@ -6,6 +6,7 @@ import { take } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { Message } from '../_models/message';
 import { User } from '../_models/user';
+import { Group } from '../_models/group';
 import { getPaginatedResult, getPaginationHeaders } from './paginationHelper';
 
 @Injectable({
@@ -31,11 +32,13 @@ export class MessageService {
       .build();
 
       this.hubConnection.start().catch(error => console.log(error));
-
+      
+      /* listen for the "NewMessage" method */
       this.hubConnection.on('ReceiveMessageThread', messages => {
         this.messageThreadSource.next(messages);
       });
 
+       /* listen for the "NewMessage" method */
       this.hubConnection.on('NewMessage', message => {
         this.messageThread$.pipe(take(1)).subscribe(messages =>
           {
@@ -44,6 +47,29 @@ export class MessageService {
             this.messageThreadSource.next([...messages, message]);
           });
       });
+
+      /* listen for the "UpdatedGroup" method. */
+      this.hubConnection.on('UpdatedGroup', (group: Group) =>
+      {
+        /* Look inside the message thread and see if there are
+           any unread messages for the user that has just
+           joined this group. And if there are, then we
+           want to mark them as read. */
+        if (group.connections.some(x => x.username === receiverUserName))
+        {
+          this.messageThread$.pipe(take(1)).subscribe(messages =>
+            {
+              messages.forEach(message =>
+                {
+                  if(!message.dateRead)
+                  {
+                    message.dateRead = new Date(Date.now())
+                  }
+                })
+                this.messageThreadSource.next([...messages]);
+            })
+        }
+      })
 
   }
 
