@@ -20,11 +20,13 @@ namespace API.Interfaces
 
         Task<IEnumerable<MessageDTO>> GetMessageThread(string currentUsername, string recipientUsername);
 
-        //Methods that help manage SignalR connections
+        //Methods that help manage SignalR connections and groups.
         void AddGroup(Group group);
         void RemoveConnection(Connection connection);
         Task<Connection> GetConnection(string connectionId);
         Task<Group> GetMessageGroup(string groupName);
+
+        Task<Group> GetGroupForConnection(string connectionId);
 
         //Save all changes to entities
         Task<bool> SaveAllAsync();

@@ -64,17 +64,21 @@ namespace API.SignalR
       //define the group name and add it to the hub connection
       var groupName = GetGroupName(caller, reciever);
       await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
-      await AddToGroup(Context, groupName);
-      var messages = await _messageRepository
+      var group = await AddToGroup(groupName);
+      await Clients.Group(groupName).SendAsync("UpdatedGroup", group);
 
+      //get the message thread between the caller and receiver
+      var messages = await _messageRepository
         .GetMessageThread(caller, reciever);
 
-      await Clients.Group(groupName).SendAsync("ReceiveMessageThread", messages);
+      //Send the ReceiveMessageThread method to whoever is connecting
+      await Clients.Caller.SendAsync("ReceiveMessageThread", messages);
     }
 
     public override async Task OnDisconnectedAsync(Exception exception)
     {
-      await RemoveFromMessageGroup(Context.ConnectionId);
+      var group = await RemoveFromMessageGroup();
+      await Clients.Group(group.Name).SendAsync("UpdatedGroup", group);
       await base.OnDisconnectedAsync(exception);
     }
 
@@ -130,7 +134,7 @@ namespace API.SignalR
             new{username = sender.UserName, alias = sender.Alias});
         }
       }
-      
+
       _messageRepository.AddMessage(message);
 
       if(await _messageRepository.SaveAllAsync())
@@ -138,10 +142,17 @@ namespace API.SignalR
         await Clients.Group(groupName).SendAsync("NewMessage", _mapper.Map<MessageDTO>(message));
       }
     }
-    private async Task<bool> AddToGroup(HubCallerContext context, string groupName)
+
+    /* Takes in a group name and returns a new or existing
+       group with updated conenctions */
+    private async Task<Group> AddToGroup(string groupName)
     {
+      //Get the group by the group and create a new connection
       var group = await _messageRepository.GetMessageGroup(groupName);
       var connection = new Connection(Context.ConnectionId, Context.User.GetUsername());
+
+      /* If a group by that name does not exist yet,
+         great a new group */
 
       if(group == null)
       {
@@ -151,15 +162,25 @@ namespace API.SignalR
 
       group.Connections.Add(connection);
 
-      return await _messageRepository.SaveAllAsync();
+      /* Check if adding the group to the database was successful */
+      if( await _messageRepository.SaveAllAsync()) return group;
 
+      throw new HubException("Failed to add the message group");
     }
 
-    private async Task RemoveFromMessageGroup(string connectionId)
+    private async Task<Group> RemoveFromMessageGroup()
     {
-      var connection = await _messageRepository.GetConnection(connectionId);
+      var connectionId = Context.ConnectionId;
+      var group = await _messageRepository.GetGroupForConnection(connectionId);
+      var connection = group.Connections.FirstOrDefault(x => x.ConnectionId == connectionId);
+
       _messageRepository.RemoveConnection(connection);
-      await _messageRepository.SaveAllAsync();
+
+      /* Check if removing the connection from the group was successful*/
+      if(await _messageRepository.SaveAllAsync())
+        return group;
+
+      throw new HubException("Failed to remove connection from group");
     }
   }
 }

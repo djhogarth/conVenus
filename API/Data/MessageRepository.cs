@@ -98,6 +98,16 @@ namespace API.Data
     {
       _context.Groups.Add(group);
     }
+
+    /* Accepts a connectionId and returns the group that has that connectionID.
+       Each connection has a corresponding group name foreign key.*/
+    public async Task<Group> GetGroupForConnection(string connectionId)
+    {
+      return await _context.Groups
+        .Include(c => c.Connections)
+        .Where(c => c.Connections.Any(x => x.ConnectionId == connectionId))
+        .FirstOrDefaultAsync();
+    }
     public async Task<Group> GetMessageGroup(string groupName)
     {
       return await _context.Groups
