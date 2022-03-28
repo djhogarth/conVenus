@@ -42,29 +42,26 @@ namespace API.Data
     {
      var query = _context.Message
       .OrderByDescending(m => m.MessageSent)
+      .ProjectTo<MessageDTO>(_mapper.ConfigurationProvider)
       .AsQueryable();
 
       query = messageParams.Container switch
       {
-        "Inbox" => query.Where(u => u.Recipient.UserName == messageParams.Username
+        "Inbox" => query.Where(u => u.RecipientUsername == messageParams.Username
           && u.RecipientDeleted == false),
-        "Outbox" => query.Where(u => u.Sender.UserName == messageParams.Username
+        "Outbox" => query.Where(u => u.SenderUsername == messageParams.Username
           && u.SenderDeleted == false),
-        _ => query.Where(u => u.Recipient.UserName ==
+        _ => query.Where(u => u.RecipientUsername ==
             messageParams.Username && u.RecipientDeleted == false && u.DateRead == null)
       };
 
-      var messages = query.ProjectTo<MessageDTO>(_mapper.ConfigurationProvider);
-
-      return await PagedList<MessageDTO>.CreateAsync(messages, messageParams.PageNumber, messageParams.PageSize);
+      return await PagedList<MessageDTO>.CreateAsync(query, messageParams.PageNumber, messageParams.PageSize);
     }
 
     public async Task<IEnumerable<MessageDTO>> GetMessageThread(string currentUsername, string recipientUsername)
     {
       //we get the conversation of the users
       var messages = await _context.Message
-        .Include(u => u.Sender).ThenInclude(p => p.Photos)
-        .Include(u => u.Recipient).ThenInclude(p => p.Photos)
         .Where(m => m.Recipient.UserName == currentUsername
             && m.RecipientDeleted == false
             && m.Sender.UserName == recipientUsername
@@ -73,12 +70,13 @@ namespace API.Data
             && m.SenderDeleted == false
         )
         .OrderBy(m => m.MessageSent)
+        .ProjectTo<MessageDTO>(_mapper.ConfigurationProvider)
         .ToListAsync();
 
         /*find out if there's any unread messages for the current user
           that they have received */
         var unreadMessages = messages.Where(m => m.DateRead == null
-          && m.Recipient.UserName == currentUsername).ToList();
+          && m.RecipientUsername == currentUsername).ToList();
 
         //we mark the messages as read
         if(unreadMessages.Any())
@@ -90,7 +88,7 @@ namespace API.Data
         }
 
         //return message DTOs
-        return _mapper.Map<IEnumerable<MessageDTO>>(messages);
+        return messages;
     }
     public void AddGroup(Group group)
     {

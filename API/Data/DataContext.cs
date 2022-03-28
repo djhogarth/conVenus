@@ -6,6 +6,9 @@ using API.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace API.Data
 {
@@ -74,8 +77,52 @@ namespace API.Data
             .WithMany(m => m.MessagesSent)
             .OnDelete(DeleteBehavior.Restrict);
 
+          builder.ApplyUtcDateTimeConverter();
+
         }
-
-
     }
+
+  /* A class that converts all the date times coming out of the database into UTC format. */
+  public static class UtcDateAnnotation
+  {
+    private const String IsUTCAnnotation = "IsUTC";
+    private static readonly ValueConverter<DateTime, DateTime> UtcConverter =
+      new ValueConverter<DateTime, DateTime>(v => v, v => DateTime.SpecifyKind(v, DateTimeKind.Utc));
+
+    private static readonly ValueConverter<DateTime?, DateTime?> UtcNullableConverter =
+      new ValueConverter<DateTime?, DateTime?>(v => v, v => v == null ? v : DateTime.SpecifyKind(v.Value, DateTimeKind.Utc));
+
+    public static PropertyBuilder<TProperty> IsUTC<TProperty>(this PropertyBuilder<TProperty> builder, Boolean IsUTC = true) =>
+      builder.HasAnnotation(IsUTCAnnotation, IsUTC);
+
+    public static Boolean IsUTC(this IMutableProperty property) =>
+      ((Boolean?)property.FindAnnotation(IsUTCAnnotation)?.Value) ?? true;
+
+  /// <summary>
+  /// Make sure this is called after configuring all your entities.
+  /// </summary>
+    public static void ApplyUtcDateTimeConverter(this ModelBuilder builder)
+    {
+      foreach (var entityType in builder.Model.GetEntityTypes())
+      {
+        foreach (var property in entityType.GetProperties())
+        {
+          if (!property.IsUTC())
+          {
+            continue;
+          }
+
+          if (property.ClrType == typeof(DateTime))
+          {
+            property.SetValueConverter(UtcConverter);
+          }
+
+          if (property.ClrType == typeof(DateTime?))
+          {
+            property.SetValueConverter(UtcNullableConverter);
+          }
+        }
+      }
+    }
+  }
 }
