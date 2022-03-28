@@ -42,14 +42,16 @@ namespace API.Controllers
         public async Task<ActionResult<IEnumerable<MemberDTO>>> GetUsers([FromQuery] UserParameters parameters)
         {
 
-          var user = await _unitOfWork.UserRepository.GetUserByUsernameAsync(User.GetUsername());
-          parameters.CurrentUsername = user.UserName;
+          var gender = await _unitOfWork.UserRepository.GetUserGender(User.GetUsername());
+          parameters.CurrentUsername = User.GetUsername();
+
           if(string.IsNullOrEmpty(parameters.Gender)){
 
             /*if set the gender parameter to the opposite of
               gender of the current user */
-            if( user.Gender == "male") parameters.Gender = "female";
-            if( user.Gender == "female") parameters.Gender = "male";
+              
+            if( gender == "male") parameters.Gender = "female";
+            if( gender == "female") parameters.Gender = "male";
 
           }
           var users = await _unitOfWork.UserRepository.GetMembersAsync(parameters);
@@ -57,11 +59,9 @@ namespace API.Controllers
           Response.AddPaginationHeader(users.CurrentPage, users.PageSize, users.TotalCount, users.TotalPages);
 
             return Ok(users);
-
         }
 
         //An endpoint that allows the retreival of one user via the primaary ID in the database.
-
 
          [HttpGet("{username}", Name = "GetUser")]
         public async Task<ActionResult<MemberDTO>> GetUser(string username){
