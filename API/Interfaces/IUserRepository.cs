@@ -13,8 +13,6 @@ namespace API.Interfaces
       //Allow the user to update their profile
         void UpdateUser (AppUser user);
 
-        Task<bool> SaveAllChangesAsync ();
-
         // returns a list of users
         Task<IEnumerable<AppUser>> GetUsersAsync();
 

@@ -73,14 +73,6 @@ namespace API.Data
       .Include(p => p.Photos)
       .ToListAsync();
     }
-
-    public async Task<bool> SaveAllChangesAsync()
-    {
-      //Make sure greater than 0 changes have been saved to our database
-
-      return await _context.SaveChangesAsync() > 0;
-    }
-
     public void UpdateUser(AppUser user)
     {
       /*mark the entity as modified so Entity Frameork
