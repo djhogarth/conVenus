@@ -3,7 +3,12 @@
     <div *ngIf="(getMessageService().messageThread$ | async)?.length === 0">
       No Messages yet...
     </div>
-    <ul *ngIf="(getMessageService().messageThread$ | async)?.length> 0" class="chat">
+    <ul
+      #scrollFunction
+      style="overflow: scroll; height: 33rem;"
+      [scrollTop]="scrollFunction.scrollHeight"
+      *ngIf="(getMessageService().messageThread$ | async)?.length> 0"
+      class="chat">
       <li *ngFor="let message of (getMessageService().messageThread$ | async)">
         <div>
           <span class="chat-img float-right">
@@ -16,11 +21,11 @@
                     message was read -->
               <small class="text-muted text-white">
                 <span class="fa fa-clock-o">
-                 sent {{message.messageSent | timeago}}
+                sent {{message.messageSent | timeago}}
                 </span>
                 <span class="text-danger" *ngIf="!message.dateRead
                   && message.senderUsername !== username">
-                 (unread)
+                (unread)
                 </span>
                 <span class="text-success" *ngIf="message.dateRead
                   && message.senderUsername !== username">
