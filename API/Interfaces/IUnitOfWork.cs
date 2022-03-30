@@ -13,6 +13,8 @@ namespace API.Interfaces
 
        ILikesRepository LikesRepository { get;}
 
+       IPhotoRepository PhotoRepository { get; }
+
       // A Method to save all changes for all repositories.
        Task<bool> Complete();
 

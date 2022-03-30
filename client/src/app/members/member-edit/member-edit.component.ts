@@ -26,20 +26,21 @@ export class MemberEditComponent implements OnInit {
     this.accountService.currentUser$.pipe(take(1)).subscribe(_user => this.user = _user);
   }
 
-  ngOnInit(): void {
+  ngOnInit(): void
+  {
     this?.loadMember();
-
   }
 
-  loadMember(){
+  loadMember()
+  {
     this.memberService.getMember(this.user.username).subscribe(_member => this.member = _member);
   }
 
-  updateMember(){
+  updateMember()
+  {
     this.memberService.updateMember(this.member).subscribe(() => {
       this.toastr.success("Profile Updated")
     this.editForm.reset(this.member);
     })
-
   }
 }

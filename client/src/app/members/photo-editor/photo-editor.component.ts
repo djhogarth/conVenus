@@ -73,7 +73,8 @@ export class PhotoEditorComponent implements OnInit {
         const photo: Photo = JSON.parse(response);
         this.member.photos.push(photo);
         //update the image on every page once upload
-          if(photo.isMain ){
+          if(photo.isMain )
+          {
             this.user.photoUrl = photo.url;
             this.member.photoUrl = photo.url;
             this.accountService.setCurrentUser(this.user);

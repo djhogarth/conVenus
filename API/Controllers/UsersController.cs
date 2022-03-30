@@ -49,7 +49,7 @@ namespace API.Controllers
 
             /*if set the gender parameter to the opposite of
               gender of the current user */
-              
+
             if( gender == "male") parameters.Gender = "female";
             if( gender == "female") parameters.Gender = "male";
 
@@ -65,8 +65,10 @@ namespace API.Controllers
 
          [HttpGet("{username}", Name = "GetUser")]
         public async Task<ActionResult<MemberDTO>> GetUser(string username){
+          var currentUsername = User.GetUsername();
+          var isCurrentUser = (currentUsername == username);
 
-          return await _unitOfWork.UserRepository.GetMemberByUsernameAsync(username) ;
+          return await _unitOfWork.UserRepository.GetMemberByUsernameAsync(username, isCurrentUser) ;
         }
 
         [HttpPut]
@@ -100,11 +102,6 @@ namespace API.Controllers
             Url = result.SecureUrl.AbsoluteUri,
             PublicId = result.PublicId
           };
-
-          if(user.Photos.Count == 0)
-          {
-            photo.IsMain = true;
-          }
 
           //add and return photo object
           user.Photos.Add(photo);
