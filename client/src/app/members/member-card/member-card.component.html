@@ -5,24 +5,22 @@
     <ul class="list-inline member-icons animate text-center">
       <li class="list-inline-item">
         <!-- profile button -->
-        <button class="btn btn-info"
+        <button class="btn btn-outline-info"
           routerLink='/members/{{member.userName}}'>
           <i class="fa fa-user-circle"></i>
         </button>
       </li>
       <li class="list-inline-item">
         <!-- like button -->
-        <button class="btn btn-danger" (click)="addLike(member)">
+        <button class="btn btn-outline-danger" (click)="addLike(member)">
           <i class="fa fa-heart"></i>
         </button>
       </li>
       <li class="list-inline-item">
         <!-- message button -->
         <button routerLink="/members/{{member.userName}}"
-          class="btn btn-success"
-          [queryParams]="{tab:3}"
-          >
-
+          class="btn btn-outline-success"
+          [queryParams]="{tab:3}">
           <i class="fa fa-paper-plane"></i>
         </button>
       </li>

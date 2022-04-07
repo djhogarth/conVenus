@@ -3,31 +3,36 @@
 </div>
 
 <div class="container mt-3">
-  <form #form="ngForm" (ngSubmit)="loadMembers()" autocomplete="off" class="form-inline mb-3">
-    <div class="form-group">
+  <form #form="ngForm" (ngSubmit)="loadMembers()" autocomplete="off" class="d-flex mb-3">
+    <!-- min age filter -->
+    <div class="d-flex mx-2">
       <label class="form-label"> <h5 class="text-primary">Min Age :</h5></label>
-      <input type="number" class="form-control ml-1" style="width: 58px; height: 25px;"
+      <input type="number" class="age-input form-control"
         name="minAge" [(ngModel)]="userParams.minAge">
     </div>
-    <div class="form-group px-3">
+    <!-- max age filter -->
+    <div class="d-flex px-3">
       <label class="form-label"> <h5 class="text-primary">Max Age :</h5></label>
-      <input type="number" class="form-control ml-1" style="width: 58px; height: 25px;"
+      <input type="number" class="age-input form-control"
         name="maxAge" [(ngModel)]="userParams.maxAge">
     </div>
-    <div class="form-group px-2">
+    <!-- gender filter -->
+    <div class="d-flex px-1">
       <label class="form-label"> <h5 class="text-primary">Show :</h5></label>
-      <select class=" form-select form-control ml-1" style="width: 120px; height: 35px;"
+      <select class="form-select form-control ml-2" style="width: 10rem; height: 3.1rem"
         name="gender" [(ngModel)]="userParams.gender">
         <option *ngFor="let gender of genderList" [value]="gender.value">
           {{gender.display}}
         </option>
       </select>
+      <!-- Apply filter/reset buttons -->
     </div>
     <button class="btn-primary ml-1" type="submit">Apply Filters</button>
     <button (click)="resetFilters()" class="btn-info ml-1" type="submit">Reset Filters</button>
+
     <!-- Oder By buttons -->
     <div class="col">
-      <div class="btn-group float-right">
+      <div class="btn-group mt-2">
         <!-- last active button -->
         <button
           class="btn-primary"
@@ -40,7 +45,7 @@
         </button>
         <!-- last created button -->
         <button
-          class="btn-primary"
+          class="btn-primary ml-1"
           type="button"
           name="oderBy"
           (click)="loadMembers()"

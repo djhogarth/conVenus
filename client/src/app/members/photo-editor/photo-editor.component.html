@@ -10,7 +10,7 @@
       <button
         [disabled]="photo.isMain || !photo.isApproved"
         (click)="setMainPhoto(photo)"
-        [ngClass]='photo.isMain ? "btn-success active" : "btn-outline-success"'
+        [ngClass]='photo.isMain ? "btn-success active" : "btn-success"'
         class="btn btn-sm mr-1">Main
       </button>
       <button

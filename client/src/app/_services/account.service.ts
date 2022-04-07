@@ -63,7 +63,6 @@ export class AccountService {
   setCurrentUser(user: User)
   {
     user.roles = [];
-    console.log(user.username);
     const roles = this.getDecodedToken(user.token).role;
 
     /* The role field within the token can either be a string

@@ -1,21 +1,21 @@
 <div class="row mb-4">
   <div name='container' class="btn-group">
     <!-- Unread Tab -->
-    <button class="btn btn-outline-primary"
+    <button class="btn btn-primary"
       btnRadio="Unread"
       (click)="loadMessages()"
       [(ngModel)]="container">
       <i class="fa fa-envelope"></i> Unread
     </button>
     <!-- Inbox Table -->
-    <button class="btn btn-outline-primary"
+    <button class="btn btn-primary"
       btnRadio="Inbox"
       (click)="loadMessages()"
       [(ngModel)]="container">
       <i class="fa fa-envelope-open"></i> Inbox
     </button>
     <!-- Outbox Tab -->
-    <button class="btn btn-outline-primary"
+    <button class="btn btn-primary"
       btnRadio="Outbox"
       (click)="loadMessages()"
       [(ngModel)]="container">
@@ -48,7 +48,7 @@
             class="img-circle rounded-circle"
             src="{{message.recipientPhotoUrl || './assets/user.png'}}"
             alt="{{message.recipientUsername}}">
-          <strong>{{message.recipientUsername | titlecase}}</strong>
+          <strong >{{message.recipientUsername | titlecase}}</strong>
         </div>
 
         <div *ngIf="container !== 'Outbox'">
@@ -61,7 +61,8 @@
       </td>
       <td>{{message.messageSent | timeago}}</td>
       <td>
-        <button (click)="$event.stopPropagation()" (click)="deleteMessage(message.id)" type="button" class="btn btn-outline-danger">Delete</button>
+        <button (click)="$event.stopPropagation()" (click)="deleteMessage(message.id)"
+           type="button" class="btn text-white bg-danger btn-danger">Delete</button>
       </td>
     </tr>
   </table>
