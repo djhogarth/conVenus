@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-primary">
     <div class="container">
         <!-- nav brand -->
-        <a class="navbar-brand" routerLink="/">ComeVenus</a>
+        <a class="navbar-brand" routerLink="/">ConVenus</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -30,7 +30,9 @@
             <!-- Dropdown -->
             <div class="dropdown" *ngIf="(accountService.currentUser$ | async) as user" dropdown>
                 <img src="{{user.photoUrl || './assets/user.png'}}" alt="{{user.username}}">
-                <a class="dropdown-toggle text-light ml-2" dropdownToggle>Welcome {{user.alias || user.username | titlecase}}</a>
+                <a style="text-decoration: none;" class="dropdown-toggle text-light ml-2"
+                  dropdownToggle>Welcome <strong>{{user.alias || user.username | titlecase}}</strong>
+                </a>
                 <div class="dropdown-menu mt-3" *dropdownMenu>
                     <a routerLink="/member/edit" class="dropdown-item">Edit Profile</a>
                     <div class="dropdown-divider"></div>

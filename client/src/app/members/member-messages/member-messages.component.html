@@ -1,17 +1,20 @@
-<div class="card bg-light">
-  <div class="card-body">
+<div class="card bg-white">
+  <div
+    class="card-body"
+    #scrollFunction
+    style="overflow: scroll; height: 33rem;"
+    [scrollTop]="scrollFunction.scrollHeight">
+
     <div *ngIf="(getMessageService().messageThread$ | async)?.length === 0">
       No Messages yet...
     </div>
+
     <ul
-      #scrollFunction
-      style="overflow: scroll; height: 33rem;"
-      [scrollTop]="scrollFunction.scrollHeight"
       *ngIf="(getMessageService().messageThread$ | async)?.length> 0"
       class="chat">
       <li *ngFor="let message of (getMessageService().messageThread$ | async)">
         <div>
-          <span class="chat-img float-right">
+          <span class="chat-img float-end">
             <img src="{{message.senderPhotoUrl || './assets/user.png'}}"
               alt="{{message.senderUsername}}" class="rounded-circle">
           </span>
@@ -51,7 +54,7 @@
           name="messageContent"
           >
         <div class="input-group-append">
-          <button [disabled]="!messageForm.valid" class="btn bg-primary btn-outline-primary ml-1" type="submit">Send</button>
+          <button [disabled]="!messageForm.valid" class="btn btn-outline-primary ml-1" type="submit">Send</button>
         </div>
       </div>
     </form>

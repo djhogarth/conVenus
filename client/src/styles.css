@@ -30,17 +30,18 @@ background-color: #adf;
 }
 
 .member-tabset > .nav-tabs > li.active {
-  border-bottom: 4px solid #378dfc;
+  border-bottom: 4px solid #3d81db;
   position: relative;
+
 }
 
 .member-tabset > .nav-tabs > li.active > a {
   border: 0 !important;
-  color: #333333;
+  color: skyblue;
 }
 
 .member-tabset > .nav-tabs > li.active > a > i {
-  color: #404040;
+  color: black;
 }
 
 .member-tabset > .tab-content {

@@ -51,8 +51,8 @@ export class MemberDetailComponent implements OnInit, OnDestroy {
 
     this.galleryOptions = [
       {
-        width: '500px',
-        height: '500px',
+        width: '31rem',
+        height: '31rem',
         imagePercent: 100,
         thumbnailsColumns: 4,
         imageAnimation: NgxGalleryAnimation.Slide,
