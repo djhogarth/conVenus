@@ -1,6 +1,6 @@
 .card {
   border: none;
-  background-color: #dcdcdc;
+  background-color: whitesmoke;
 }
 
 
@@ -14,7 +14,8 @@
  .chat li {
    margin-bottom: 10px;
    padding-bottom: 10px;
-   border-bottom: 1px dotted #B3A9A9
+   border-bottom: 1px solid #B3A9A9;
+   color: black;
  }
 
  .rounded-circle

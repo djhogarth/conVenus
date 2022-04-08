@@ -8,6 +8,7 @@ import { Message } from '../_models/message';
 import { User } from '../_models/user';
 import { Group } from '../_models/group';
 import { getPaginatedResult, getPaginationHeaders } from './paginationHelper';
+import { BusyService } from './busy.service';
 
 @Injectable({
   providedIn: 'root'
@@ -20,10 +21,11 @@ export class MessageService {
    messageThread$ = this.messageThreadSource.asObservable();
 
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private busyService: BusyService) { }
 
   createHubConnection(user: User, receiverUserName: string)
   {
+    this.busyService.busy
     this.hubConnection = new HubConnectionBuilder()
       .withUrl(this.hubUrl + 'message?user=' + receiverUserName, {
         accessTokenFactory: () => user.token
@@ -31,8 +33,13 @@ export class MessageService {
       .withAutomaticReconnect()
       .build();
 
-      this.hubConnection.start().catch(error => console.log(error));
-      
+      /* whether or not the promise returned from
+      the hub connection start is successful or rejects,
+       turn off the loading indicator */
+      this.hubConnection.start().catch(error =>
+        console.log(error)).finally(() =>
+          this.busyService.idle());
+
       /* listen for the "NewMessage" method */
       this.hubConnection.on('ReceiveMessageThread', messages => {
         this.messageThreadSource.next(messages);
@@ -77,6 +84,9 @@ export class MessageService {
   {
     if(this.hubConnection)
     {
+      /* When stopping the hub connection,
+       clear the message thread source to an empty array */
+      this.messageThreadSource.next([]);
       this.hubConnection.stop();
     }
 

@@ -16,6 +16,9 @@ export class MemberMessagesComponent implements OnInit {
   @ViewChild('messageForm') messageForm: NgForm;
   messageContent: string;
 
+  //indicates whether loading indicator is on or off
+  loading = false;
+
   constructor(private messageService: MessageService) { }
 
   ngOnInit(): void
@@ -31,9 +34,10 @@ export class MemberMessagesComponent implements OnInit {
 
   sendMessage()
   {
+    this.loading = true;
     this.messageService.sendMessage(this.username, this.messageContent).then(() => {
       this.messageForm.reset();
-    })
+    }).finally(() => this.loading = false);
   }
 
 

@@ -31,9 +31,12 @@
 <div *ngIf="messages?.length > 0" class="row">
   <table class="table table-hover" style="cursor: pointer;">
     <tr>
-      <th class="text-primary" style="width: 40%;  text-align: center;"> Messages:</th>
-      <th class="text-primary" style="width: 20%;"> From / To :</th>
-      <th class="text-primary" style="width: 20%;"> Sent / Received:</th>
+      <th style="width: 40%; text-align: center;">
+        <h5 class="text-primary font-weight-bold">Messages:</h5></th>
+      <th style="width: 20%;">
+        <h5 class="text-primary font-weight-bold">Sender / Reciever:</h5></th>
+      <th style="width: 20%;">
+        <h5 class="text-primary font-weight-bold">Sent At / Recieved By:</h5></th>
       <th style="width: 20%;"></th>
     </tr>
     <!-- Display messages -->
@@ -41,14 +44,14 @@
       routerLink='{{container === "Outbox" ?
         "/members/" + message.recipientUsername :
           "/members/" + message.senderUsername}} ' [queryParams]="{tab:3}">
-      <td>{{message.content}}</td>
+      <td class="text-dark font-weight-bold">{{message.content}}</td>
       <td>
         <div *ngIf="container === 'Outbox'">
           <img
             class="img-circle rounded-circle"
             src="{{message.recipientPhotoUrl || './assets/user.png'}}"
             alt="{{message.recipientUsername}}">
-          <strong >{{message.recipientUsername | titlecase}}</strong>
+          <strong class="text-dark">{{message.recipientUsername | titlecase}}</strong>
         </div>
 
         <div *ngIf="container !== 'Outbox'">
@@ -56,10 +59,10 @@
             class="img-circle rounded-circle"
             src="{{message.senderPhotoUrl || './assets/user.png'}}"
             alt="{{message.senderUsername}}">
-          <strong>{{message.senderUsername | titlecase}}</strong>
+          <strong class="text-dark">{{message.senderUsername | titlecase}}</strong>
         </div>
       </td>
-      <td>{{message.messageSent | timeago}}</td>
+      <td class="text-dark font-weight-bold">{{message.messageSent | timeago}}</td>
       <td>
         <button (click)="$event.stopPropagation()" (click)="deleteMessage(message.id)"
            type="button" class="btn text-white bg-danger btn-danger">Delete</button>
