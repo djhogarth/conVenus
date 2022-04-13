@@ -50,32 +50,20 @@ namespace API.Data
     {
       //we get the conversation of the users
       var messages = await _context.Message
-        .Where(m => m.Recipient.UserName == currentUsername
-            && m.RecipientDeleted == false
-            && m.Sender.UserName == recipientUsername
-            || m.Recipient.UserName == recipientUsername
-            && m.Sender.UserName == currentUsername
-            && m.SenderDeleted == false
+        .Where(
+          m => m.Recipient.UserName == currentUsername
+          && m.RecipientDeleted == false
+          && m.Sender.UserName == recipientUsername
+          || m.Recipient.UserName == recipientUsername
+          && m.Sender.UserName == currentUsername
+          && m.SenderDeleted == false
         )
+        .MarkUnreadAsRead(currentUsername)
         .OrderBy(m => m.MessageSent)
         .ProjectTo<MessageDTO>(_mapper.ConfigurationProvider)
         .ToListAsync();
 
-        /*find out if there's any unread messages for the current user
-          that they have received */
-        var unreadMessages = messages.Where(m => m.DateRead == null
-          && m.RecipientUsername == currentUsername).ToList();
-
-        //we mark the messages as read
-        if(unreadMessages.Any())
-        {
-          foreach (var message in unreadMessages)
-          {
-            message.DateRead = DateTime.UtcNow;
-          }
-        }
-
-        //return message DTOs
+        //return messageDTOs
         return messages;
     }
     public void AddGroup(Group group)
