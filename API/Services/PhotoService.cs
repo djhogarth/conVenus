@@ -1,14 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using API.Helpers;
-using API.Interfaces;
-using CloudinaryDotNet;
-using CloudinaryDotNet.Actions;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Options;
-
 namespace API.Services
 {
   public class PhotoService : IPhotoService
@@ -49,7 +38,7 @@ namespace API.Services
 
     public async Task<DeletionResult> DeletePhotoAsync(string publicId)
     {
-      //create deletion parameters 
+      //create deletion parameters
      var deleteParams = new DeletionParams(publicId);
 
      var result = await _cloudinary.DestroyAsync(deleteParams);

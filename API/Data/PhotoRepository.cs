@@ -1,12 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using API.DataTransferObjects;
-using API.Entities;
-using API.Interfaces;
-using Microsoft.EntityFrameworkCore;
-
 namespace API.Data
 {
   public class PhotoRepository : IPhotoRepository

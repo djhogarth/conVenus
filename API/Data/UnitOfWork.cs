@@ -1,10 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using API.Interfaces;
-using AutoMapper;
-
 namespace API.Data
 {
 /* The UnitOfWork class is an one stop shop where all changes from

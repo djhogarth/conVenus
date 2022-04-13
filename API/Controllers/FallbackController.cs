@@ -1,6 +1,3 @@
-using System.IO;
-using Microsoft.AspNetCore.Mvc;
-
 namespace API.Controllers
 {
     [Route("[controller]")]

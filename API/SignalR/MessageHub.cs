@@ -1,15 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using API.Extensions;
-using API.Interfaces;
-using AutoMapper;
-using Microsoft.AspNetCore.SignalR;
-using System.Globalization;
-using API.DataTransferObjects;
-using API.Entities;
-
 namespace API.SignalR
 {
   /* This class implements the Hub class of SignalR.
