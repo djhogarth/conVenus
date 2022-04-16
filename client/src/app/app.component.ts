@@ -4,14 +4,13 @@ import { User } from './_models/user';
 import { AccountService } from './_services/account.service';
 import { PresenceService } from './_services/presence.service';
 
-
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  title = 'The Dating Application';
+  title = 'ConVenus - where dating partners convene';
   users: any;
 
   constructor(private accountService: AccountService, private presenceService: PresenceService ) {}

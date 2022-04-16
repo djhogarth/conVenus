@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
@@ -27,7 +27,8 @@ import { TimeagoModule } from "ngx-timeago";
     PaginationModule.forRoot(),
     ButtonsModule.forRoot(),
     TimeagoModule.forRoot(),
-    ModalModule.forRoot()
+    ModalModule.forRoot(),
+
   ],
   exports:[
     ToastrModule,
@@ -39,7 +40,7 @@ import { TimeagoModule } from "ngx-timeago";
     PaginationModule,
     ButtonsModule,
     TimeagoModule,
-    ModalModule
-  ]
+    ModalModule,
+   ]
 })
 export class SharedModule { }
