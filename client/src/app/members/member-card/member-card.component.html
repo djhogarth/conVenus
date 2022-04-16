@@ -29,10 +29,10 @@
   <div class="card-body p-1">
     <h6 class="card-title text-center mb-1">
       <span [class.is-online]="(getPresence().onlineUsers$ | async).includes(member.userName)">
-        <i class="fa  fa-user-circle-o mr-2"></i>
+        <i class="fa  fa-user-circle-o me-2"></i>
       </span>
-      <i *ngIf="member.gender == 'male'" class="fa fa-male mr-2"></i>
-      <i *ngIf="member.gender == 'female'" class="fa fa-female mr-2"></i>
+      <i *ngIf="member.gender == 'male'" class="fa fa-male me-2"></i>
+      <i *ngIf="member.gender == 'female'" class="fa fa-female me-2"></i>
       {{member.alias}}, {{member.age}}
     </h6>
     <p class="card-text text-muted text-center">{{member.city}}</p>

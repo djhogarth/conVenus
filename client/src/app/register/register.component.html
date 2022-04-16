@@ -11,14 +11,14 @@
     [label]="'Alias'">
   </app-text-input>
   <!-- gender field -->
-  <div class="form-group ml-2 mb-0">
-    <label class="control-label" style="margin-right: 10px;"> <h6 class='text-primary'>Gender: </h6>  </label>
+  <div class="mb-3 ms-2 mb-0">
+    <label style="margin-right: 10px;"> <h6 class='text-primary'>Gender: </h6>  </label>
     <div>
-      <label class="radio-inline">
-        <i class="fa fa-mars"></i> <input class="ml-2 mr-3" type="radio" value="male" formControlName='gender'>
+      <label class="form-check-label">
+        <i class="fa fa-mars"></i> <input class="form-check-input ms-2 me-3" type="radio" value="male" formControlName='gender'>
       </label>
-      <label class="radio-inline">
-        <i class="fa fa-venus ml-2"></i> <input class="ml-2" type="radio" value="female" formControlName='gender'>
+      <label class="form-check-label">
+        <i class="fa fa-venus ms-2"></i> <input class="form-check-input ms-2" type="radio" value="female" formControlName='gender'>
       </label>
     </div>
   </div>
@@ -44,8 +44,8 @@
     [label]="'Confirm Password'">
   </app-text-input>
 
-  <div class="form-group text-center" >
-    <button [disabled]="registerForm.invalid" type="submit" class="btn btn-success mr-2">Register</button>
-    <button type="button" (click)="cancel()" class="btn btn-light mr-2">Cancel</button>
+  <div class=" d-flex text-center" >
+    <button [disabled]="registerForm.invalid" type="submit" class="btn btn-success me-2">Register</button>
+    <button type="button" (click)="cancel()" class="btn btn-light me-2">Cancel</button>
   </div>
 </form>

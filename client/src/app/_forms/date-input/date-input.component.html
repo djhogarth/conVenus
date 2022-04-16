@@ -1,4 +1,4 @@
-<div class="form-group">
+<div class="mb-3">
   <input
     type="text"
     [class.is-invalid]="ngControl.touched
@@ -10,7 +10,7 @@
     [bsConfig]="bsConfig"
     [maxDate]="maxDate"
   >
-  <div *ngIf="ngControl.control.errors?.required" class="ml-2 invalid-feedback">
+  <div *ngIf="ngControl.control.errors?.required" class="ms-2 invalid-feedback">
     Required Field
   </div>
 </div>

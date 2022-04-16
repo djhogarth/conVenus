@@ -1,4 +1,4 @@
-<div class="form-group">
+<div class="mb-3">
   <input
     [class.is-invalid]="ngControl.touched
     && ngControl.invalid"
@@ -8,13 +8,13 @@
     placeholder={{label}} >
 
   <div *ngIf="ngControl.control.errors?.required"
-    class="invalid-feedback ml-2">Required Field</div>
+    class="invalid-feedback ms-2">Required Field</div>
 
   <div *ngIf="ngControl.control.errors?.minlength"
     class="invalid-feedback m-2">{{label}} is too short. Minimum: {{ngControl.control.errors.minlength['requiredLength']}} characters.</div>
 
   <div *ngIf="ngControl.control.errors?.maxlength"
-    class="invalid-feedback ml-2">{{label}} is too long. Maximum: {{ngControl.control.errors.maxlength['requiredLength']}} characters.</div>
+    class="invalid-feedback ms-2">{{label}} is too long. Maximum: {{ngControl.control.errors.maxlength['requiredLength']}} characters.</div>
 
   <div *ngIf="ngControl.control.errors?.isMatching"
     class="invalid-feedback m1-2">Passwords do not match. Please try again.</div>

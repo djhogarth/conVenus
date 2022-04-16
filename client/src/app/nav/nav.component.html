@@ -6,7 +6,7 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
-            <ul class="navbar-nav mr-auto">
+            <ul class="navbar-nav me-auto">
                 <!-- nav links -->
                 <ng-container *ngIf="accountService.currentUser$ | async" >
                     <li class="nav-item ">
@@ -22,15 +22,14 @@
                         <a class="nav-link " routerLink="/admin" routerLinkActive="active">Admin</a>
                     </li>
                 </ng-container>
-                  <li class="nav-item">
+                  <!-- <li class="nav-item">
                     <a class="nav-link " routerLink="/errors" routerLinkActive="active">Errors</a>
-                  </li>
-
+                  </li> -->
             </ul>
             <!-- Dropdown -->
             <div class="dropdown" *ngIf="(accountService.currentUser$ | async) as user" dropdown>
                 <img src="{{user.photoUrl || './assets/user.png'}}" alt="{{user.username}}">
-                <a style="text-decoration: none;" class="dropdown-toggle text-light ml-2"
+                <a style="text-decoration: none;" class="dropdown-toggle text-light ms-2"
                   dropdownToggle>Welcome <strong>{{user.alias || user.username | titlecase}}</strong>
                 </a>
                 <div class="dropdown-menu mt-3" *dropdownMenu>
@@ -40,18 +39,18 @@
                 </div>
             </div>
             <!-- Form -->
-            <form #loginForm ="ngForm" *ngIf="(accountService.currentUser$ | async) === null" class="form-inline mt-2 mt-md-0" (ngSubmit)="login()"
+            <form #loginForm ="ngForm" *ngIf="(accountService.currentUser$ | async) === null" class="d-flex mt-2 mt-md-0" (ngSubmit)="login()"
                 autocomplete="off">
                 <input
                     name="username"
                     [(ngModel)]="model.username"
-                    class="form-control mr-sm-2"
+                    class="form-control me-sm-2"
                     type="text"
                     placeholder="Username">
                 <input
                     name="password"
                     [(ngModel)]="model.password"
-                    class="form-control mr-sm-2"
+                    class="form-control me-sm-2"
                     type="password"
                     placeholder="Password">
                 <button class="btn btn-success btn-sm my-2 my-sm-0" type="submit">Login</button>
