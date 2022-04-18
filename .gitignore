@@ -9,6 +9,7 @@
 *.user
 *.userosscache
 *.sln.docstates
+appsettings.Development.json
 
 #Development Database file
 datingapp.db
