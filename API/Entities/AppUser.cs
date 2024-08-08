@@ -3,7 +3,7 @@ namespace API.Entities
 
     public class AppUser : IdentityUser<int>
     {
-        public DateTime DateOfBirth{get; set;}
+        public DateOnly DateOfBirth{get; set;}
 
         //The name the user wants to be known as
         public string Alias { get; set; }

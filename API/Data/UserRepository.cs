@@ -31,8 +31,8 @@ namespace API.Data
       query = query.Where(u => u.Gender == parameters.Gender);
 
       /* select a min and max age which filters members by date of birth */
-      var minDob = DateTime.Today.AddYears(-parameters.MaxAge -1);
-      var maxDob = DateTime.Today.AddYears(-parameters.MinAge);
+      var minDob = DateOnly.FromDateTime(DateTime.Today.AddYears(-parameters.MaxAge -1));
+      var maxDob = DateOnly.FromDateTime(DateTime.Today.AddYears(-parameters.MinAge));
 
       query = query.Where(u => u.DateOfBirth >= minDob && u.DateOfBirth <= maxDob);
 
