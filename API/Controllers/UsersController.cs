@@ -99,7 +99,7 @@ namespace API.Controllers
            photo if there's no other photos*/
           var photo = new Photo
           {
-            Url = result.SecureUrl.AbsoluteUri,
+            Url = result.SecureUri.AbsoluteUri,
             PublicId = result.PublicId
           };
 

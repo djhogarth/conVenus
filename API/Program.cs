@@ -10,7 +10,7 @@ builder.Services.AddCors();
 builder.Services.AddIdentityService(builder.Configuration);
 builder.Services.AddSignalR();
 
-//get access to the app
+//get access to the app, middleware
 var app = builder.Build();
 // configure the HTTP request pipeline
 app.UseMiddleware<ExceptionMiddleware>();
